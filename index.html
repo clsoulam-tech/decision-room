@@ -2,7 +2,7 @@
 <html lang="zh-Hant-HK">
 <head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
-<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'sha256-yhaU6D9rKKbir+FJR4OJfk6uACT/gYyTQIB1PqV4h6g='; style-src 'sha256-RcRFMYwbpS+9hnxT+J17Kzv554Tc5x/iVxO+PLDCKZ8='; worker-src blob:; img-src data:; base-uri 'none'; form-action 'none'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'sha256-VOG6YtC/TmwbOfgKWvQdd8/DFFKFEnLKYlmOx+TrwRc='; style-src 'sha256-+Eegu8ZPOGv5lQwo50AAg5pUvdWF422XUDAoZM9ERSI='; worker-src blob:; img-src data:; base-uri 'none'; form-action 'none'">
 <title>決策室｜核心課逐課練習</title><style>:root{color-scheme:dark;--bg:#101b18;--card:#182822;--line:#395048;--text:#f5f6ed;--mute:#bfcac0;--mint:#c5f27d;--sand:#f2d6a0;--red:#ffb8a7;font:16px/1.6 system-ui,"PingFang HK",sans-serif}
 *{box-sizing:border-box}body{margin:0;background:radial-gradient(ellipse at 90% 0,#203329,var(--bg) 42%);color:var(--text);min-height:100vh}header{display:flex;justify-content:space-between;align-items:center;padding:1rem max(1rem,calc((100% - 1160px)/2));border-bottom:1px solid var(--line);gap:.75rem}.brand{display:flex;align-items:center;gap:.65rem;white-space:nowrap}.brand b,.brand span:not(.mark){display:block}.brand b{font-size:1.15rem}.brand span:not(.mark){font-size:.58rem;color:var(--mute);letter-spacing:.12em}.mark{display:grid;place-items:center;background:var(--mint);color:var(--bg);border-radius:11px;width:40px;height:40px;font-size:1.3rem}.local{font-size:.78rem;color:var(--mute);text-align:right}.local span{display:inline-block;width:.48rem;height:.48rem;border-radius:100%;background:var(--mint);margin-right:.15rem}
 .shell{max-width:1160px;margin:auto;padding:0 1rem;display:grid;grid-template-columns:168px minmax(0,1fr);gap:2rem}nav{padding-top:2rem;display:flex;flex-direction:column;gap:.2rem}nav a{display:block;padding:.58rem .74rem;text-decoration:none;color:var(--mute);border-radius:8px}nav a[aria-current="page"]{background:var(--card);color:var(--mint);font-weight:700}main{min-width:0;padding:2rem 0}main:focus{outline:none}h1,h2,h3,p{margin:0 0 .7rem}h1{font-size:clamp(1.8rem,4vw,3rem);line-height:1.18;letter-spacing:-.02em}h2{font-size:1.32rem;line-height:1.32}h3{font-size:1rem}p{overflow-wrap:anywhere}.muted,small{color:var(--mute)}.eyebrow{text-transform:uppercase;letter-spacing:.13em;color:var(--mint);font-size:.76rem;font-weight:700}.hero{padding:clamp(1rem,4vw,2.25rem);background:linear-gradient(126deg,#244333,#182822 78%);border:1px solid var(--line);border-radius:18px;margin-bottom:1rem}.card{background:var(--card);border:1px solid var(--line);border-radius:15px;padding:clamp(1rem,2.8vw,1.5rem);margin:1rem 0}.grid,.stats{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:.8rem}.grid .card,.stats .card{margin:.2rem 0}.stats b{font-size:1.4rem}.pills,.row{display:flex;flex-wrap:wrap;gap:.55rem 1rem;align-items:center;margin:.7rem 0}.pills span,.pill{font-size:.8rem;border:1px solid var(--line);border-radius:999px;padding:.18rem .63rem;color:var(--mute)}.callout{border-left:3px solid var(--sand);padding:.55rem .85rem;background:#243228;border-radius:4px;margin:.7rem 0}.ok{color:var(--mint)}.error{color:var(--red)}.result{border-color:#6b8652}
@@ -134,13 +134,21 @@ select,input:not([type=radio]),textarea{background:#11191d}
 .chart-library details{border-top:1px solid var(--line);padding:.45rem .2rem}
 .ref-original{margin:.3rem 0 .55rem}
 .ref-extracted{white-space:pre-wrap;overflow-wrap:anywhere;line-height:1.65;background:#141e1e;padding:.65rem;border-radius:.5rem;max-height:25rem;overflow:auto}
+.welcome-course { min-height:0;padding-right:1rem; }
+.welcome-course h1 { font-size:clamp(1.45rem,5vw,2.35rem); }
+.lesson-steps { list-style:none;padding:0;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:.35rem;margin:.8rem 0; }
+.lesson-steps li{background:#172529;border:1px solid #425b58;border-radius:.55rem;padding:.45rem .4rem;min-width:0;line-height:1.4}
+.lesson-steps b,.lesson-steps small{display:block;}
+.lesson-steps b{font-size:.88rem}.lesson-steps small{font-size:.75rem}
+.lesson-steps [aria-current=step]{border-color:var(--mint);background:#243b34}
+.row.lesson-actions{align-items:stretch}
 </style>
 </head>
 <body>
 <a href="#workspace" class="skip">跳至主內容</a>
 <header><div class="brand"><span class="mark" aria-hidden="true">♠</span><div><b>決策室</b><span>POKER STUDY LAB</span></div></div><span class="local"><span aria-hidden="true"></span> 離線練習</span></header>
 <div class="shell"><nav aria-label="練習工具"><a href="#home">總覽</a><a href="#course">核心課</a><a href="#training">練習</a><a href="#odds">賠率快測</a><a href="#exam">盲測</a><a href="#import">私人牌譜</a><a href="#progress">學習進度</a><a href="#library">題庫</a></nav>
-<main id="workspace" tabindex="-1"><p>正在讀取這個瀏覽器的進度…</p><noscript><p>此工具需要 JavaScript。請在 Safari 或 Chrome 直接開啟網頁，不要用檔案預覽。</p></noscript></main></div>
+<main id="workspace" tabindex="-1"><p>正在讀取這個瀏覽器的進度…</p><noscript><p>請在 Safari 或 Chrome 直接開啟網頁，不要用檔案預覽。</p></noscript></main></div>
 <footer>只供離線學習及牌譜覆盤，不涉及投注。</footer>
 <script type="module">const coreModule=(()=>{
 const DAY=86400000;
@@ -713,16 +721,40 @@ function openDB(){
     r.onsuccess=()=>resolve(r.result);r.onerror=()=>reject(r.error);
   });
 }
-async function load(){
+async function load(key='state'){
   const db=await openDB();
-  try{return await new Promise((res,rej)=>{const r=db.transaction('local').objectStore('local').get('state');r.onsuccess=()=>res(r.result);r.onerror=()=>rej(r.error);});}finally{db.close();}
+  try{return await new Promise((res,rej)=>{const r=db.transaction('local').objectStore('local').get(key);r.onsuccess=()=>res(r.result);r.onerror=()=>rej(r.error);});}finally{db.close();}
 }
-async function save(value){
+async function save(value,key='state'){
   const db=await openDB();
-  try{await new Promise((res,rej)=>{const t=db.transaction('local','readwrite');t.objectStore('local').put(value,'state');t.oncomplete=res;t.onerror=()=>rej(t.error);t.onabort=()=>rej(t.error);});}finally{db.close();}
+  try{await new Promise((res,rej)=>{const t=db.transaction('local','readwrite');t.objectStore('local').put(value,key);t.oncomplete=res;t.onerror=()=>rej(t.error);t.onabort=()=>rej(t.error);});}finally{db.close();}
 }
 
 return {load,save};
+})();
+
+const materialsModule=(()=>{
+const materialLimit=8*1024*1024;
+const dictionary=o=>o&&typeof o==='object'&&!Array.isArray(o)&&Object.getPrototypeOf(o)===Object.prototype;
+const imageKey=/^(?:rfi-(?:utg|hj|co|btn|sb)|bb-btn-(?:2|2\.5|3)|gallery-(?:utg|hj|co|btn|sb|bb)-[a-z0-9]+)$/;
+function validateMaterials(x){
+ if(!dictionary(x)||x.kind!=='decision-room-materials-v1'||!dictionary(x.charts)||!dictionary(x.pages))throw Error('這不是決策室教材包。請選「決策室-私人教材包.json」。');
+ const charts={},pages={};let total=0;
+ const ci=Object.entries(x.charts),pi=Object.entries(x.pages);
+ if(!ci.length||ci.length>70||!pi.length||pi.length>83)throw Error('教材包的頁數或圖表數不正確。');
+ for(const [k,o] of ci){
+  if(!imageKey.test(k)||!dictionary(o)||typeof o.label!=='string'||o.label.length>130||typeof o.anchor!=='string'||!/^(UTG|HJ|CO|BTN|SB|BB)![A-Z]{1,3}[1-9][0-9]{0,2}$/.test(o.anchor)||typeof o.data!=='string'||o.data.length>1800000||!/^iVBORw0KGgo[A-Za-z0-9+/]*={0,2}$/.test(o.data))throw Error('教材包內有無法讀取的圖表。');
+  total+=o.data.length;charts[k]={label:o.label,anchor:o.anchor,data:o.data};
+ }
+ for(const [k,t] of pi){
+  if(!/^[0-9]{1,2}$/.test(k)||+k<4||+k>86||typeof t!=='string'||t.length===0||t.length>9000)throw Error('教材包內有無法讀取的原書頁。');
+  total+=t.length*3;pages[k]=t;
+ }
+ if(total>materialLimit)throw Error('教材包超出大小限制。');
+ return {kind:x.kind,charts,pages};
+}
+
+return {materialLimit,validateMaterials};
 })();
 
 const sampleModule=(()=>{
@@ -1904,7 +1936,7 @@ function pdfPages(pdf,kind,a,b){
  return Array.from({length:b-a+1},(_,i)=>'<a class="btn ref-pg" href="'+esc(pdf.url)+'#page='+(a+i)+'" target="_blank" rel="noopener">PDF 第 '+(a+i)+' 頁</a>').join('');
 }
 function sourceText(a,b){
- return Array.from({length:b-a+1},(_,i)=>a+i).filter(p=>privateCorePages[p]).map(p=>'<details class="ref-original"><summary>看原書印刷第 '+(p-1)+' 頁文字</summary><p class="muted">從原檔擷取，換行可能與原版不同；原圖和公式請對照 PDF。</p><div class="ref-extracted">'+esc(privateCorePages[p])+'</div></details>').join('');
+ return Array.from({length:b-a+1},(_,i)=>a+i).filter(p=>(loaded?.pages??privateCorePages)[p]).map(p=>'<details class="ref-original"><summary>看原書印刷第 '+(p-1)+' 頁文字</summary><p class="muted">從原檔擷取，換行可能與原版不同；原圖和公式請對照 PDF。</p><div class="ref-extracted">'+esc((loaded?.pages??privateCorePages)[p])+'</div></details>').join('');
 }
 function pdfBlock(kind,a,b,pdfs){
  const pdf=pdfs[kind];
@@ -1919,18 +1951,24 @@ function wirePdfBlocks(container,kind,pdf){
 }
 function charts(keys){
  return keys.map(key=>{
-  const t=chartAssets[key];
-  if(!t)return '<p class="ref-source">'+esc(chartLabels[key])+'。可分享版不附圖；請對照自己的《翻前剝削起手表》。</p>';
+  const t=(loaded?.charts??chartAssets)[key];
+  if(!t)return '<p class="ref-source">'+esc(chartLabels[key])+'。可在「我的教材」載入圖表，或對照自己的《翻前剝削起手表》。 <a href="#materials">載入教材</a></p>';
   return '<figure class="ref-figure"><figcaption>'+esc(t.label)+' · '+esc(t.anchor)+'</figcaption><div class="ref-image-clip" tabindex="0" aria-label="圖表區，可橫向捲動"><img loading="lazy" alt="'+esc(t.label)+'；完整圖表" src="data:image/png;base64,'+t.data+'"></div><button type="button" data-act="chart-zoom" aria-pressed="false">放大圖表</button></figure>';
  }).join('');
 }
-const hasCharts=Object.keys(chartAssets).length>0;
+let loaded=null,savedHere=false;
+function setLocalMaterials(pack,persistent){loaded=pack;savedHere=persistent;}
+function hasCharts(){return Object.keys(loaded?.charts??chartAssets).length>0;}
+function materialsPicker(){
+ return '<section class="card" aria-labelledby="materials-title"><p class="eyebrow">只在你的裝置</p><h1 id="materials-title">我的教材</h1><p>不載入也能練習。載入教材包後，相關原書文字和圖表會出現在題目旁。</p><label class="drop">選擇「決策室-私人教材包.json」 <input type="file" accept=".json,application/json" data-materials-file></label><p role="status" id="materials-status">'+(loaded?'已載入 '+Object.keys(loaded.pages).length+' 頁原書文字及 '+Object.keys(loaded.charts).length+' 個圖表位置。'+(savedHere?'已保存在這個瀏覽器。':'只在目前分頁可用。'):'未載入教材包。')+'</p><p class="muted">檔案不會上傳到 GitHub 或寫入進度備份。</p><div class="row"><a class="btn primary" href="#course">返回核心課</a>'+(hasCharts()?'<a class="btn" href="#charts">查看圖表索引</a>':'')+(loaded?'<button type="button" data-act="clear-materials">移除此瀏覽器的教材</button>':'')+'</div></section>';
+}
 function chartGallery(){
- const keys=Object.keys(chartAssets);
+ const current=loaded?.charts??chartAssets;
+ const keys=Object.keys(current);
  const items=keys;
  if(!items.length)return '';
  const groups={};
- for(const k of items)(groups[chartAssets[k].anchor.split('!')[0]]??=[]).push(k);
+ for(const k of items)(groups[current[k].anchor.split('!')[0]]??=[]).push(k);
  return '<section class="card chart-library" id="chart-library"><h2>私人圖表索引</h2><p>原工作簿的嵌入圖像，按分頁及圖像錨點排列。未綁定題目的圖只按位置標示。</p>'+Object.entries(groups).map(([g,k])=>'<details><summary>'+esc(g)+' · '+k.length+' 張</summary>'+charts(k)+'</details>').join('')+'</section>';
 }
 function primaryLesson(q,lesson){
@@ -1982,7 +2020,7 @@ function materialReference(q,{lesson=null,after=false,pdfs={},defaultOpen=false}
  return '<details class="study-ref"'+(defaultOpen?' open':'')+'><summary>'+(after?'相關教材與頁碼':'答之前：看教材')+'</summary><div class="study-ref-body">'+body+'</div></details>';
 }
 
-return {chartKeys,wirePdfBlocks,hasCharts,chartGallery,materialReference};
+return {chartKeys,wirePdfBlocks,setLocalMaterials,hasCharts,materialsPicker,chartGallery,materialReference};
 })();
 
 const course_viewModule=(()=>{
@@ -2013,7 +2051,7 @@ function question(r,lesson,pdfs){
  return '<section class="card"><div class="pills"><span>'+tag+'</span><span>第 '+(r.index+1)+'／'+r.items.length+' 題</span></div>'+
  '<progress aria-label="已完成的題數" value="'+r.answered.length+'" max="'+r.items.length+'"></progress>'+
  '<h2 tabindex="-1" id="course-focus">'+esc(q.prompt)+'</h2>'+(viewing&&!a?materialReference(q,{lesson,pdfs}):'')+
- (a&&viewing?'<p tabindex="-1" id="course-feedback" class="'+(a.correct?'ok':'error')+'">'+(a.correct?'答對了':'這題答錯了')+'</p><p><b>參考答案：</b>'+esc(q.choices[q.answer])+'</p><p>'+esc(q.why)+'</p>'+materialReference(q,{lesson,pdfs,after:true,defaultOpen:true})+'<div class="row">'+nav('course-advance',r.index+1===r.items.length?'完成練習':'下一題',true)+'</div>':
+ (a&&viewing?'<p tabindex="-1" id="course-feedback" class="'+(a.correct?'ok':'error')+'">'+(a.correct?'答對了':'這題答錯了')+'</p><p><b>參考答案：</b>'+esc(q.choices[q.answer])+'</p><p>'+esc(q.why)+'</p><div class="row">'+nav('course-advance',r.index+1===r.items.length?'完成練習':'下一題',true)+'</div>'+materialReference(q,{lesson,pdfs,after:true,defaultOpen:true}):
  '<form data-form="course-answer"><fieldset><legend class="muted">選一個最符合條件的答案</legend>'+q.choices.map((_,i)=>choice(q,i)).join('')+'</fieldset><button class="primary">'+(viewing?'提交答案':'鎖定答案')+'</button></form>')+
  (!viewing?'<p class="muted">答完這一輪前，不會顯示正誤。</p>':'')+'</section>';
 }
@@ -2023,9 +2061,9 @@ function complete(r,lesson,record,pdfs){
  const passing=total&&correct>=Math.ceil(.8*total);
  const already=record?.checkHistory?.length>1;
  return '<section class="card result"><h2 tabindex="-1" id="course-feedback">'+modeLabel[r.kind]+'完成 · '+correct+'／'+total+'</h2>'+
- (isCheck?'<p>'+ (passing?(already?'已通過本輪檢核。這題做過了，成績不代表你已掌握陌生牌局。':'已通過本輪檢核。'):'未通過本輪檢核。先看下方解釋，再回本課重練。')+(record?.due?' 下一次複習：'+fmt(record.due)+'。':'')+'</p>':'<p>這輪算作練習，不會當成已通過本課。</p>')+
- '<div class="row">'+nav('course-exit',isCheck&&passing?'返回課程進度':'返回本課',true)+
- (r.kind==='practice'?nav('course-start-check','開始課節檢核'):'')+'</div>'+
+ (isCheck?'<p>'+ (passing?(already?'已通過本輪檢核。這題做過了，成績不代表你已掌握陌生牌局。':'已通過本輪檢核。'):'未通過本輪檢核。先看下方解釋，再回本課重練。')+(record?.due?' 下一次複習：'+fmt(record.due)+'。':'')+'</p>':r.kind==='practice'?'<p>這輪練習已完成。接着做一題檢核，看看不用提示時是否也能判斷。</p>':'<p>補充練習已完成。這一輪不會改動核心課的完成紀錄。</p>')+
+ '<div class="row">'+(r.kind==='practice'?nav('course-start-check','第 3 步：做檢核',true):isCheck&&passing?nav('course-next','前往下一個建議課節',true):isCheck?nav('course-start-practice','回到練習再試',true):'')+
+ nav('course-exit','返回本課',r.kind==='extra')+'</div>'+
  (r.kind==='check'&&total===1?'<p class="muted">這一題只核對本課的一個重點。若想確認自己能舉一反三，試做不同牌面或不同注碼的新題。</p>':'')+
  r.items.map((q,i)=>'<details><summary>'+(r.answered[i]?.correct?'答對 · ':'答錯 · ')+esc(q.topic||q.prompt)+'</summary><p>'+esc(q.prompt)+'</p><p><b>你的答案：</b>'+esc(q.choices[r.answered[i]?.choice])+'</p><p><b>參考答案：</b>'+esc(q.choices[q.answer])+'</p><p>'+esc(q.why)+'</p>'+materialReference(q,{lesson,pdfs,after:true})+'</details>').join('')+'</section>';
 }
@@ -2036,8 +2074,10 @@ function coursePage(c,hands,notice='',pdf={} ){
  const record=history[lesson.id];
  const count=courseLessons.filter(l=>c.records[l.id]?.passedAt).length;
  const parked=c.active&&!c.active.done&&c.active.lessonId!==lesson.id;
- const top='<div class="hero course-hero"><div class="hero-art" aria-hidden="true"><span class="art-orbit"></span><span class="art-card art-card-one">A<i>♠</i></span><span class="art-card art-card-two">Q<i>♦</i></span><span class="art-chip"></span></div><p class="eyebrow">CHAK POKER / 核心課</p><h1>跟原書順序練習</h1><p class="course-intro">從引言到第 8 章。先看例子，再答題。學完可以用模擬或舊牌覆盤。</p><div class="course-progress"><progress aria-label="已完成核心課課節" value="'+count+'" max="'+courseLessons.length+'"></progress><p>'+count+'／'+courseLessons.length+' 課完成。'+(next?'建議：'+esc(title(next))+'。':'所有核心課已完成首輪檢核。')+'</p></div>'+
- (next&&next.id!==selection.id?'<div class="row">'+nav('course-lesson:'+next.id,'去建議課節',true)+'</div>':'')+(parked?'<div class="row">'+nav('course-resume','繼續未完成的一輪')+'</div>':'')+'</div>';
+ const beginner=!extra&&!record?.passedAt&&!record?.practiceHistory?.length;
+ const steps=extra?'':'<ol class="lesson-steps" aria-label="學習步驟"><li'+(beginner?' aria-current="step"':'')+'><b>1 看重點</b><small>先看例子</small></li><li><b>2 做練習</b><small>可查教材</small></li><li'+(!beginner&&!record?.passedAt?' aria-current="step"':'')+'><b>3 做檢核</b><small>再到下一課</small></li></ol>';
+ const top='<div class="hero course-hero welcome-course"><p class="eyebrow">核心課 · 由引言到第 8 章</p><h1>跟原書順序練習</h1><p class="course-intro">'+(count===0?'第一次來？由引言開始。未載入教材，一樣可以做題。':'你可以繼續目前課節，或者從課序選一課複習。')+'</p><div class="course-progress"><progress aria-label="已完成核心課課節" value="'+count+'" max="'+courseLessons.length+'"></progress><p>'+count+'／'+courseLessons.length+' 課完成</p></div>'+
+ (next&&next.id!==selection.id?'<div class="row">'+nav('course-lesson:'+next.id,'去建議課節：'+title(next),true)+'</div>':'')+(parked?'<div class="row">'+nav('course-resume','繼續未完成的一輪',true)+'</div>':'')+'</div>';
  const active=c.active?.lessonId===lesson.id?c.active:null;
  const source=extra?esc(extra.source)+' · '+esc(extra.pages):printed(lesson);
  const sources='<div class="pills">'+(extra?'<span>'+source+'</span>':source)+'<span>'+esc(lessonStatus(record))+'</span></div>';
@@ -2048,13 +2088,13 @@ function coursePage(c,hands,notice='',pdf={} ){
  }
  const guide=extra?null:courseGuides[lesson.id],deep=extra?null:deeperGuides[lesson.id];
  const learnFirst=guide&&!record?.practiceHistory?.length&&!record?.passedAt;
- const available='<div class="row lesson-actions">'+(learnFirst?nav('course-guide','先看例子',true):'')+(extra?nav('course-start-extra','開始補充練習',true)+nav('course-extra-close','返回核心課'):
-  (record?.practiceHistory.length||record?.passedAt?nav('course-start-check',record?.passedAt?'重做課節檢核':'開始課節檢核',!record?.due||record.due>Date.now())+nav('course-start-practice','重做課內練習'):nav('course-start-practice','開始課內練習',!learnFirst)))+
+ const available='<div class="row lesson-actions">'+(learnFirst?nav('course-guide','第 1 步：看重點與例子',true):'')+(extra?nav('course-start-extra','開始補充練習',true)+nav('course-extra-close','返回核心課'):
+  (record?.practiceHistory.length||record?.passedAt?nav('course-start-check',record?.passedAt?'重做課節檢核':'第 3 步：做檢核',!record?.due||record.due>Date.now())+nav('course-start-practice','重做課內練習'):nav('course-start-practice','開始課內練習',!learnFirst)))+
   (record?.passedAt?nav('course-start-review',record.due<=Date.now()?'現在複習':'複習本課',record.due<=Date.now()):'')+
-  (guide&&!learnFirst?nav('course-guide','先看例子'):'')+nav('course-outline','查看原書課序')+(hasCharts?'<a class="btn" href="#charts">私人圖表</a>':'')+'</div>';
+  (guide&&!learnFirst?nav('course-guide','先看例子'):'')+nav('course-outline','查看原書課序')+'<a class="btn" href="#materials">我的教材</a>'+(hasCharts()?'<a class="btn" href="#charts">圖表索引</a>':'')+'</div>';
  const guideHTML=guide?'<section class="card guided-lesson" aria-labelledby="guide-title"><p class="eyebrow">先理解，再出題</p><h2 id="guide-title" tabindex="-1">'+esc(guide.title)+'</h2><p>'+esc(guide.plain)+'</p>'+
    '<div class="worked-example"><h3>用一個例子看清楚</h3><p>'+esc(guide.example)+'</p></div>'+
-   '<h3>甚麼情況不能照用？</h3><p>'+esc(guide.limit)+'</p>'+
+   '<h3>甚麼情況不能照用？</h3><p>'+esc(guide.limit)+'</p>'+(!record?.practiceHistory.length?'<div class="row">'+nav('course-start-practice','第 2 步：開始練習',true)+'</div>':'')+
    (deep?'<details class="guide-details"><summary>再做一例：'+esc(deep.title)+'</summary><p>'+esc(deep.plain)+'</p><ol>'+deep.steps.map(s=>'<li>'+esc(s)+'</li>').join('')+'</ol><p><b>換了條件：</b>'+esc(deep.counterexample)+'</p><small>'+esc(deep.source)+'</small></details>'+
    '<div class="transfer"><h3>試你自己講一次</h3><p>'+esc(deep.transfer.prompt)+'</p><details><summary>看答案與原因</summary><p><b>'+esc(deep.transfer.answer)+'</b></p><p>'+esc(deep.transfer.why)+'</p></details><small>想通再揭曉。不計分，亦不屬於盲測。</small></div>':'')+'</section>':'';
  const chapters=chapterTitles.map((name,i)=>{
@@ -2083,7 +2123,7 @@ function coursePage(c,hands,notice='',pdf={} ){
    '<div class="row">'+(v.hands?nav('course-replay:50','揀 $0.25/$0.50 的精選決定',true):'')+(allHands.hands>v.hands?nav('course-replay:all','所有級別的精選決定'):'')+nav('course-sim','用模擬牌練習')+'<a class="btn" href="#import">去私人牌譜</a></div></section>';
  }
  return top+'<div class="course-layout"><div class="course-main"><p id="course-notice" role="status">'+esc(notice)+'</p><section class="card current-lesson"><p class="eyebrow">'+(extra?'加練 / COMPANION':('本課 / '+chapterTitles[lesson.chapter].split('｜')[0]))+'</p><h2 tabindex="-1" id="course-focus">'+esc(title(lesson))+'</h2>'+sources+
- available+
+ steps+available+
  (record?.due?'<p>下次複習：'+fmt(record.due)+'。</p>':'')+
  (record?.checkHistory?.at(-1)?.topics?.length?'<p>上次答錯的重點：'+esc(record.checkHistory.at(-1).topics.join('、'))+'。</p>':'')+
  '</section>'+guideHTML+'<section class="card"><details class="lesson-reference" '+(extra?'open':'')+'><summary>教材重點與前提</summary><p>'+esc(lesson.summary)+'</p><h3>學完應該可以</h3><ul>'+lesson.goals.map(g=>'<li>'+esc(g)+'</li>').join('')+'</ul>'+
@@ -2317,7 +2357,8 @@ return {evaluateReviewDecision,rankReviewDecisions};
 })();
 
 function makeWorker(){const u=URL.createObjectURL(new Blob(["const parserModule=(()=>{\n// Browser-safe, local-only parser for English GGPoker Hold'em No Limit TXT.\nconst M = '\\\\$((?:[0-9]+|[0-9]{1,3}(?:,[0-9]{3})+)(?:\\\\.[0-9]{1,2})?)';\nconst header = new RegExp(`^Poker Hand #([A-Za-z0-9_-]+): Hold'em No Limit \\\\(${M}/${M}\\\\) - (\\\\d{4})/(\\\\d{2})/(\\\\d{2}) (\\\\d{2}:\\\\d{2}:\\\\d{2})$`);\nconst post = new RegExp(`^posts (small blind|big blind|ante|straddle) ${M}$`);\nconst direct = new RegExp(`^(calls|bets) ${M}( and is all-in)?$`);\nconst raise = new RegExp(`^raises ${M} to ${M}( and is all-in)?$`);\nconst refund = new RegExp(`^Uncalled bet \\\\(${M}\\\\) returned to (.+)$`);\nconst collect = new RegExp(`^(.+) collected ${M} from pot$`);\nconst cardList = s => (s.match(/\\[[^\\]]*\\]/g) || []).flatMap(g => g.slice(1,-1).trim().split(/\\s+/).filter(Boolean));\nconst validCards = (cards, n) => cards.length===n && cards.every(c=>/^[2-9TJQKA][cdhs]$/.test(c)) && new Set(cards).size===n;\nconst cents = s => {\n  if (!/^(?:\\d+|\\d{1,3}(?:,\\d{3})+)(?:\\.\\d{1,2})?$/.test(s)) throw new Error('invalid-money');\n  const [whole, frac=''] = s.replaceAll(',','').split('.');\n  const value = Number(whole) * 100 + Number(frac.padEnd(2, '0'));\n  if (!Number.isSafeInteger(value)) throw new Error('money-out-of-range');\n  return value;\n};\nconst format = s => s.replace(/^\\uFEFF/,'').replace(/\\r\\n?/g,'\\n').split('\\n').map(l=>l.trimEnd()).join('\\n').trim();\nconst positions = {2:['BTN','BB'],3:['BTN','SB','BB'],4:['BTN','SB','BB','CO'],5:['BTN','SB','BB','UTG','CO'],6:['BTN','SB','BB','UTG','HJ','CO']};\nconst sname = {FLOP:'flop',TURN:'turn',RIVER:'river'};\n\nfunction parseHand(raw) {\n  const lines=raw.split('\\n');\n  const h=lines[0].match(header);\n  if(!h) throw new Error(/^Poker Hand #\\S+: Omaha\\b/.test(lines[0])?'unsupported-omaha':'unsupported-header');\n  const [,id,sb0,bb0,y,mo,d,t]=h;\n  const stakes={sb:cents(sb0),bb:cents(bb0)};\n  if(stakes.sb<=0 || stakes.bb<stakes.sb) throw new Error('invalid-stakes');\n  const datetime=`${y}-${mo}-${d}T${t}`;\n  if(!Number.isFinite(Date.parse(datetime+'Z')) || new Date(datetime+'Z').toISOString().slice(0,19)!==datetime) throw new Error('invalid-date');\n  const m=lines[1]?.match(/^Table '(.*)' (\\d+)-max Seat #(\\d+) is the button$/);\n  if(!m) throw new Error('unsupported-table');\n  const [,table,max,button0]=m, button=Number(button0);\n  let seats=[],hero=null,cards=[],board=[],street='preflop',summary=false,flopCount=null,aggressiveActionsPreflop=0;\n  const flags=new Set(), shown=new Map(), actions=[],decisions=[], variants={}, state=new Map();\n  let pot=0,target=0,blinds={sb:0,bb:0},expectedPot=null,rake=null,jackpot=null,other=null,winnings=0;\n  for(const line of lines.slice(2)){\n    const seat=line.match(/^Seat (\\d+): (.*) \\(\\$((?:\\d+|\\d{1,3}(?:,\\d{3})+)(?:\\.\\d{1,2})?) in chips\\)$/);\n    if (!seat) break;\n    const n=Number(seat[1]), stack=cents(seat[3]),player=seat[2];\n    if (seats.some(s=>s.seat===n || s.player===player)) flags.add('duplicate-seat');\n    seats.push({seat:n,player,stack,position:null});\n  }\n  seats.sort((a,b)=>a.seat-b.seat);\n  const btnIdx=seats.findIndex(s=>s.seat===button), labels=positions[seats.length];\n  if(!labels || btnIdx<0 || Number(max)!==6) flags.add('positions-unverified');\n  for(let i=0;i<seats.length;i++){\n    const s=seats[i];\n    s.position=labels&&btnIdx>=0?labels[(i-btnIdx+seats.length)%seats.length]:`Seat ${s.seat}`;\n    state.set(s.player,{...s,remaining:s.stack,paid:0,folded:false,allIn:false});\n  }\n  const resetStreet=()=>{for(const s of state.values())s.paid=0;target=0};\n  const pfLive=()=>[...state.values()].filter(s=>!s.folded);\n  function transact(s,kind,amount,to,allIn=false) {\n    const before=pot;\n    if(kind==='return') {\n      if(amount>s.paid || amount>pot) flags.add('invalid-refund');\n      s.paid-=amount;s.remaining+=amount;pot-=amount;\n    } else if(kind==='fold') s.folded=true;\n    else if(amount) {\n      if(s.remaining<amount || s.allIn) flags.add('invalid-stack');\n      s.remaining-=amount;\n      if(kind!=='ante')s.paid+=amount;\n      pot+=amount;\n      target=Math.max(target,s.paid);\n      s.allIn ||= allIn || s.remaining===0;\n      if(allIn && s.remaining!==0) flags.add('all-in-stack-mismatch');\n    }\n    actions.push({street,position:s.position,kind,amount,to,allIn,potBefore:before,potAfter:pot});\n  }\n  for(const line of lines.slice(2+seats.length)) {\n    if(!line)continue;\n    if(line==='*** SUMMARY ***'){summary=true;continue}\n    if(summary) {\n      const amounts=line.startsWith('Total pot ') && [...line.matchAll(/(?:Total pot|Rake|Jackpot|Bingo|Fortune|Tax) \\$((?:\\d{1,3}(?:,\\d{3})+|\\d+)(?:\\.\\d{1,2})?)/g)].map(a=>cents(a[1]));\n      if(amounts && amounts.length>=3){[expectedPot,rake,jackpot]=amounts; other=amounts.slice(3).reduce((a,b)=>a+b,0)}\n      if(line.startsWith('Board ') && cardList(line).join(' ')!==board.join(' '))flags.add('board-summary-mismatch');\n      continue;\n    }\n    if(line==='*** HOLE CARDS ***') continue;\n    if(line.startsWith('Dealt to ')) {\n      const known=line.match(/^Dealt to (.+?) \\[([^\\]]+)\\]$/);\n      if(known){\n        if(hero)flags.add('multiple-visible-hole-hands');\n        hero=known[1];cards=known[2].split(/\\s+/);\n      }\n      continue;\n    }\n    const next=line.match(/^\\*\\*\\* (?:(FIRST|SECOND) )?(FLOP|TURN|RIVER) \\*\\*\\*/);\n    if(next) {\n      const cc=cardList(line), toStreet=sname[next[2]], n={flop:3,turn:4,river:5}[toStreet];\n      if(next[1]) {\n        flags.add('multiple-runs');\n        variants[next[1]]=cc;\n        if(next[1]==='FIRST') board=cc;\n        continue;\n      }\n      if(!validCards(cc,n) || board.some((c,i)=>c!==cc[i]) || {preflop:3,flop:4,turn:5,river:6}[street]!==n) flags.add('invalid-board-order');\n      if(toStreet==='flop') flopCount=pfLive().length;\n      street=toStreet;\n      board=cc;\n      resetStreet();\n      continue;\n    }\n    if(/^\\*\\*\\* (?:(?:FIRST|SECOND) )?SHOWDOWN \\*\\*\\*$/.test(line) || /^Hand was run /.test(line)) continue;\n    let q;\n    if((q=line.match(refund))) {\n      const s=state.get(q[2]);\n      if(!s){flags.add('unknown-refund-player');continue}\n      const returned=cents(q[1]);transact(s,'return',returned,s.paid-returned);\n      continue;\n    }\n    if((q=line.match(collect))) {\n      if(!state.has(q[1]))flags.add('unknown-winner');\n      winnings+=cents(q[2]);continue;\n    }\n    if(/: total \\$\\d/.test(line)){flags.add('unverified-pot-adjustment');continue}\n    const sep=line.indexOf(': ');\n    if(sep<0){flags.add('unsupported-line');continue}\n    const player=line.slice(0,sep), prose=line.slice(sep+2), s=state.get(player);\n    if(!s){flags.add('unknown-actor');continue}\n    if(/^shows \\[/.test(prose)){shown.set(player,cardList(prose));continue}\n    if(/^mucks\\b/.test(prose))continue;\n    if(/Cashout|Cash Out/i.test(prose)){flags.add('cashout');continue}\n    if((q=prose.match(post))){\n      const kind={'small blind':'sb','big blind':'bb',ante:'ante',straddle:'straddle'}[q[1]], amount=cents(q[2]);\n      if(kind==='ante'||kind==='straddle')flags.add('ante-or-straddle');\n      if(kind==='sb'||kind==='bb'){\n        blinds[kind]++;\n        if(amount!==stakes[kind] || s.position!==kind.toUpperCase() && !(seats.length===2&&kind==='sb'&&s.position==='BTN'))flags.add('blind-mismatch');\n      }\n      transact(s,kind,amount,kind==='ante'?0:s.paid+amount);continue;\n    }\n    let kind, amount=0, to=s.paid, allIn=false;\n    const due=Math.max(0,target-s.paid);\n    if(prose==='folds')kind='fold';\n    else if (prose==='checks'){\n      kind='check';\n      if(due)flags.add('check-facing-bet');\n    } else if((q=prose.match(direct))){\n      kind=q[1]==='calls'?'call':'bet';amount=cents(q[2]);to+=amount;allIn=!!q[3];\n      if(kind==='call' && (amount!==Math.min(due,s.remaining)||!due))flags.add('call-mismatch');\n      if(kind==='bet' && (target!==0||amount===0))flags.add('invalid-bet');\n    } else if((q=prose.match(raise))){\n      kind='raise';to=cents(q[2]);amount=to-s.paid;allIn=!!q[3];\n      if(amount<=0 || to<=target || (to-target!==cents(q[1])))flags.add('raise-mismatch');\n    } else {flags.add('unsupported-action');continue}\n    if(s.folded || s.allIn)flags.add('action-after-fold-or-all-in');\n    const actual={kind,amount,to};\n    if(player===hero) {\n      const live=pfLive(), opponents=live.filter(o=>o.player!==player);\n      // Facing an all-in, the already-invested amount is still available to match.\n      const effectiveStack=Math.max(0,Math.min(s.remaining,Math.max(0,...opponents.map(o=>o.remaining+Math.max(0,o.paid-s.paid)))));\n      decisions.push({index:actions.length,street,board:[...board],position:s.position,pot,toCall:Math.min(due,s.remaining),stack:s.remaining,effectiveStack,activeCount:live.length,flopCount,aggressiveActionsPreflop,actual,eligible:false});\n    }\n    if(street==='preflop'&&kind==='raise')aggressiveActionsPreflop++;\n    transact(s,kind,amount,to,allIn);\n  }\n  if(!hero || !state.has(hero) || !validCards(cards,2))flags.add('hero-unverified');\n  if(shown.has(hero) && shown.get(hero).slice().sort().join()!==cards.slice().sort().join())flags.add('hero-showdown-mismatch');\n  if(new Set([...cards,...board]).size!==cards.length+board.length)flags.add('duplicate-card');\n  const knownCards=new Set([...cards,...board]);\n  for(const [player,cc] of shown) if(player!==hero) {\n    if(!validCards(cc,2) || cc.some(c=>knownCards.has(c)))flags.add('duplicate-or-invalid-showdown-cards');\n    for(const c of cc)knownCards.add(c);\n  }\n  if(blinds.sb!==1 || blinds.bb!==1)flags.add('missing-or-extra-blind');\n  if(!summary || expectedPot===null || winnings===0)flags.add('incomplete');\n  if(expectedPot!==null && expectedPot!==pot)flags.add('pot-mismatch');\n  if(expectedPot!==null && winnings!==expectedPot-rake-jackpot-other)flags.add('settlement-mismatch');\n  if([...state.values()].some(s=>s.allIn) && (flopCount>2 || pfLive().length>2))flags.add('possible-side-pot');\n  const status=flags.size?'review':'verified';\n  for(const decision of decisions) {\n    decision.eligible=status==='verified'&&(decision.street==='preflop'||decision.flopCount===2)&&decision.activeCount>=2;\n  }\n  return {id,site:'GG',stakes,datetime,table,hero,cards,board,seats,actions,decisions,status,flags:[...flags],raw,flopCount,aggressiveActionsPreflop,summary:{pot:expectedPot,rake,jackpot,other,winnings},runouts:variants};\n}\nfunction parseHands(input) {\n  const normalized=format(String(input??''));\n  if(!normalized)return {hands:[],errors:[{index:0,reason:'empty-file'}]};\n  const blocks=normalized.split(/(?=^\\uFEFF?Poker Hand #)/m).map(format).filter(Boolean);\n  const hands=[],errors=[];\n  for(const [i,raw] of blocks.entries()){\n    try {hands.push(parseHand(raw))} catch(error){errors.push({index:i,reason:error.message})}\n  }\n  return {hands,errors};\n}\nfunction mergeHands(existing=[],incoming=[]) {\n  const keyed=new Map(existing.map(h=>[`${h.site}:${h.id}`,h]));\n  const conflicts=[];\n  let added=0,duplicates=0;\n  for(const h of incoming){\n    const key=`${h.site}:${h.id}`, old=keyed.get(key);\n    if(!old){keyed.set(key,h);added++}\n    else if(old.raw===h.raw)duplicates++;\n    else conflicts.push(h); // Keep current version stable. Caller can persist conflict candidates separately.\n  }\n  return {hands:[...keyed.values()],added,duplicates,conflicts};\n}\n\nreturn {cents,parseHands,mergeHands};\n})();\nconst {parseHands}=parserModule;\n\nself.onmessage=async({data:files})=>{\n  try{\n    const out=[];\n    for(let i=0;i<files.length;i++){\n      const file=files[i];\n      if(file.size>40*1024*1024)throw Error('單份檔案最多 40 MB，請分開匯入。');\n      const buffer=await file.arrayBuffer();\n      const hash=Array.from(new Uint8Array(await crypto.subtle.digest('SHA-256',buffer)),x=>x.toString(16).padStart(2,'0')).join('');\n      const result=parseHands(new TextDecoder().decode(buffer));\n      out.push({hash,hands:result.hands,errorCount:result.errors.length});\n      self.postMessage({type:'progress',done:i+1,total:files.length});\n    }\n    self.postMessage({type:'done',out});\n  }catch(e){self.postMessage({type:'error',error:e.message});}\n};\n"],{type:"text/javascript"})); try{return new Worker(u);}finally{URL.revokeObjectURL(u);}}
-const {materialReference, wirePdfBlocks, chartGallery, hasCharts}=reference_viewModule;
+const {validateMaterials, materialLimit}=materialsModule;
+const {materialReference, wirePdfBlocks, chartGallery, hasCharts, materialsPicker, setLocalMaterials}=reference_viewModule;
 const {questions: baseBank, skills, pendingQuestions}=questionsModule;
 const {mergeHands, parseHands}=parserModule;
 const {thresholds, equity, bluffEV, numberAnswer, nextReview, plan, examGrade, validateBackup, restoreSummary, makeState, DAY}=coreModule;
@@ -2342,13 +2383,17 @@ const examNames={'mock-a':'盲測 A','mock-b':'盲測 B'};
 const practiceOptions='<option value="">所有能力</option>'+skillEntries.map(([k,n])=>'<option value="'+esc(k)+'">'+esc(n)+'</option>').join('');
 let state, persistError='', view='home', feedback=null, liveMath=null, replay={index:null,decision:0,result:null}, filter={batch:'',bb:'',position:'',street:''};
 let startAt=Date.now(), working=false, status='', catalogFilter={skill:'',query:''}, lastNotice='', inspection='', examKey=null, replayScope=null;
-let writeQueue=Promise.resolve(), restoring=false, storageUnavailable=false;
+let writeQueue=Promise.resolve(), restoring=false, storageUnavailable=false, changingMaterials=false;
+function within(p,ms){
+ let timer;
+ return Promise.race([p,new Promise((_,reject)=>{timer=setTimeout(()=>reject(Error('storage-timeout')),ms);})]).finally(()=>clearTimeout(timer));
+}
 const coursePdfs={}, pdfPending={};
 const expectedPDF={core:'a1e1c688385c15287007dfab414c76aed6af97c2078dc88e7cb62f88f3dfdb31',srp:'5baabe8662fbd298669bbc41f71d0afce1d6b4246f6d58a7dcba32e4715195a5'};
 const recentReview=new Map();
 let reviewMode='curated', reviewDetails=null;
 function persist(){
- if(storageUnavailable)return Promise.resolve();
+  if(storageUnavailable)return Promise.resolve();
   const copy=structuredClone(state);
   writeQueue=writeQueue.catch(()=>{}).then(()=>save(copy)).then(()=>{persistError='';},()=>{persistError='未能儲存本機資料。請先匯出備份，不要關閉此分頁。';const p=document.getElementById('persist-error');if(p)p.textContent=persistError;});
   return writeQueue;
@@ -2357,8 +2402,8 @@ const headline=(eyebrow,title,copy)=>'<p class="eyebrow">'+eyebrow+'</p><h1>'+ti
 const btn=(act,label,primary=false)=>'<button type="button" data-act="'+esc(act)+'"'+(primary?' class="primary"':'')+'>'+esc(label)+'</button>';
 const link=(target,label,primary=false)=>'<a class="btn'+(primary?' primary':'')+'" href="#'+target+'">'+label+'</a>';
 function draw(focus=''){
-  for(const a of document.querySelectorAll('nav a'))a.getAttribute('href')==='#'+(location.hash==='#simulation'||view==='charts'?'course':view)?a.setAttribute('aria-current','page'):a.removeAttribute('aria-current');
-  const page={home,charts:chartGallery,course:()=>coursePage(state.course,state.hands,lastNotice,coursePdfs),training,odds,exam,import:imports,progress,library}[view]??home;
+  for(const a of document.querySelectorAll('nav a'))a.getAttribute('href')==='#'+(location.hash==='#simulation'||(view==='charts'||view==='materials')?'course':view)?a.setAttribute('aria-current','page'):a.removeAttribute('aria-current');
+  const page={home,charts:chartGallery,materials:materialsPicker,course:()=>coursePage(state.course,state.hands,lastNotice,coursePdfs),training,odds,exam,import:imports,progress,library}[view]??home;
   main.innerHTML='<p role="status" class="error" id="persist-error">'+esc(persistError)+'</p>'+page();
   if(focus)document.getElementById(focus)?.focus();
 }
@@ -2580,6 +2625,11 @@ function finishCourseRound(){
 function courseAction(action){
  const c=state.course, [kind,id]=action.split(':');
  const core=courseLessons.find(l=>l.id===id),extra=courseExtras.find(l=>l.id===id);
+ if(kind==='course-next'){
+   const next=recommendedLesson(c.records);
+   if(!next)return;
+   c.active=null;c.lessonId=next.id;c.extraId=null;persist();draw('course-focus');return;
+ }
  if(kind==='course-guide'){document.getElementById('guide-title')?.focus();return;}
  if(kind==='course-outline'){document.getElementById('course-outline-title')?.focus();return;}
  if(kind==='course-lesson'&&core){c.lessonId=core.id;c.extraId=null;}
@@ -2644,9 +2694,9 @@ function route(){
    location.replace('#course');return;
  }
  if(hash==='import'&&replay.synthetic){replayScope=null;replay={index:null,decision:0,result:null};}
- if(hash==='charts'&&!hasCharts){location.replace('#course');return;}
+ if(hash==='charts'&&!hasCharts()){location.replace('#materials');return;}
  if(hash==='simulation'&&!replay.synthetic){location.replace('#course');return;}
- view=hash==='simulation'?'import':['home','course','training','odds','exam','import','progress','library','charts'].includes(hash)?hash:'course';
+ view=hash==='simulation'?'import':['home','course','training','odds','exam','import','progress','library','charts','materials'].includes(hash)?hash:'course';
  startAt=Date.now();lastNotice='';draw('workspace');
 }
 function storedAttempt(q,choice,confidence,mode){
@@ -2708,6 +2758,14 @@ main.addEventListener('submit',async e=>{
 });
 main.addEventListener('click',e=>{
  const el=e.target.closest('button[data-act]');if(!el||restoring)return;const a=el.dataset.act;
+ if(a==='clear-materials'){
+   if(changingMaterials||!confirm('移除此瀏覽器的原書文字和圖表？練習進度不會受影響。'))return;
+   changingMaterials=true;el.disabled=true;
+   within(save(null,'materials'),2200).then(()=>{setLocalMaterials(null,false);if(view==='materials')draw('materials-title');},()=>{
+     const note=document.querySelector('#materials-status');if(note)note.textContent='瀏覽器未能移除已儲存教材。請再試一次。';el.disabled=false;
+   }).finally(()=>{changingMaterials=false;});
+   return;
+ }
  if(a==='chart-zoom'){
    const f=el.closest('.ref-figure');if(!f)return;
    const enlarged=f.classList.toggle('ref-enlarged');
@@ -2753,6 +2811,23 @@ main.addEventListener('keydown',e=>{
  else if(!liveMath?.result&&e.target.id==='math-field'){e.preventDefault();e.target.form.requestSubmit();}
 });
 main.addEventListener('change',async e=>{
+ if(e.target.hasAttribute('data-materials-file')&&e.target.files?.[0]){
+   if(changingMaterials)return;
+   changingMaterials=true;
+   const input=e.target,file=input.files[0],note=document.querySelector('#materials-status');
+   input.disabled=true;if(note)note.textContent='正在核對教材包…';
+   try{
+     if(file.size>materialLimit)throw Error('教材包超出 8 MB。');
+     let obj;try{obj=JSON.parse(await file.text());}catch{throw Error('檔案格式不正確；請選私人教材包 JSON。');}
+     const pack=validateMaterials(obj);
+     let persisted=false;
+     try{await within(save(pack,'materials'),2200);persisted=true;}catch{}
+     setLocalMaterials(pack,persisted);
+     if(view==='materials')draw('materials-title');
+   }catch(error){if(note?.isConnected)note.textContent=error.message+' 原有教材沒有被替換。';}
+   finally{changingMaterials=false;if(input.isConnected){input.disabled=false;input.value='';}}
+   return;
+ }
  const key=e.target.dataset.coursePdf??e.target.dataset.referencePdf;
  if(Object.hasOwn(expectedPDF,key)&&e.target.files?.[0]){
    const file=e.target.files[0], token=Symbol(), inline=e.target.hasAttribute('data-reference-pdf');
@@ -2803,13 +2878,13 @@ main.addEventListener('dragover',e=>{if(view==='import'&&e.dataTransfer.types.in
 main.addEventListener('dragleave',()=>document.querySelector('#drop')?.classList.remove('drag'));
 main.addEventListener('drop',e=>{if(e.dataTransfer.files.length){e.preventDefault();if(view==='import')importFiles(e.dataTransfer.files);}});
 addEventListener('hashchange',route);
-let storageTimer;
 try{
- state=await Promise.race([load(),new Promise((_,reject)=>{storageTimer=setTimeout(()=>reject(Error('storage-timeout')),2200);})])??makeState();
+ const [book,progress]=await within(Promise.all([within(load('materials'),1200).catch(()=>null),load()]),2200);
+ state=progress??makeState();if(book){try{setLocalMaterials(validateMaterials(book),true);}catch{}}
 }catch(e){
- state=makeState();persistError='暫時讀不到這個瀏覽器的進度。你可以練習，但請先備份再關閉網頁。';
- storageUnavailable=true;
-}finally{clearTimeout(storageTimer);}
+ state=makeState();storageUnavailable=true;
+ persistError='暫時讀不到這個瀏覽器的進度。你可以練習，但請先備份再關閉網頁。';
+}
 try{state.course=validateCourse(state.course);}catch(e){state.course=blankCourse();persistError='未能讀取舊課程進度。其他本機資料已保留。';}
 route();
 </script>
