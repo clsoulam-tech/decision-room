@@ -2,7 +2,7 @@
 <html lang="zh-Hant-HK">
 <head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
-<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'sha256-VOG6YtC/TmwbOfgKWvQdd8/DFFKFEnLKYlmOx+TrwRc='; style-src 'sha256-+Eegu8ZPOGv5lQwo50AAg5pUvdWF422XUDAoZM9ERSI='; worker-src blob:; img-src data:; base-uri 'none'; form-action 'none'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'sha256-LtbzqOhhe1yXfRdMY29EeGdyX1DBUe/rzbtkOnQ3hRw='; style-src 'sha256-STwYNkiuL2+Qt9Z4I3AIdeTJquW6OE5/D70p9krgUeI='; worker-src blob:; img-src data:; base-uri 'none'; form-action 'none'">
 <title>決策室｜核心課逐課練習</title><style>:root{color-scheme:dark;--bg:#101b18;--card:#182822;--line:#395048;--text:#f5f6ed;--mute:#bfcac0;--mint:#c5f27d;--sand:#f2d6a0;--red:#ffb8a7;font:16px/1.6 system-ui,"PingFang HK",sans-serif}
 *{box-sizing:border-box}body{margin:0;background:radial-gradient(ellipse at 90% 0,#203329,var(--bg) 42%);color:var(--text);min-height:100vh}header{display:flex;justify-content:space-between;align-items:center;padding:1rem max(1rem,calc((100% - 1160px)/2));border-bottom:1px solid var(--line);gap:.75rem}.brand{display:flex;align-items:center;gap:.65rem;white-space:nowrap}.brand b,.brand span:not(.mark){display:block}.brand b{font-size:1.15rem}.brand span:not(.mark){font-size:.58rem;color:var(--mute);letter-spacing:.12em}.mark{display:grid;place-items:center;background:var(--mint);color:var(--bg);border-radius:11px;width:40px;height:40px;font-size:1.3rem}.local{font-size:.78rem;color:var(--mute);text-align:right}.local span{display:inline-block;width:.48rem;height:.48rem;border-radius:100%;background:var(--mint);margin-right:.15rem}
 .shell{max-width:1160px;margin:auto;padding:0 1rem;display:grid;grid-template-columns:168px minmax(0,1fr);gap:2rem}nav{padding-top:2rem;display:flex;flex-direction:column;gap:.2rem}nav a{display:block;padding:.58rem .74rem;text-decoration:none;color:var(--mute);border-radius:8px}nav a[aria-current="page"]{background:var(--card);color:var(--mint);font-weight:700}main{min-width:0;padding:2rem 0}main:focus{outline:none}h1,h2,h3,p{margin:0 0 .7rem}h1{font-size:clamp(1.8rem,4vw,3rem);line-height:1.18;letter-spacing:-.02em}h2{font-size:1.32rem;line-height:1.32}h3{font-size:1rem}p{overflow-wrap:anywhere}.muted,small{color:var(--mute)}.eyebrow{text-transform:uppercase;letter-spacing:.13em;color:var(--mint);font-size:.76rem;font-weight:700}.hero{padding:clamp(1rem,4vw,2.25rem);background:linear-gradient(126deg,#244333,#182822 78%);border:1px solid var(--line);border-radius:18px;margin-bottom:1rem}.card{background:var(--card);border:1px solid var(--line);border-radius:15px;padding:clamp(1rem,2.8vw,1.5rem);margin:1rem 0}.grid,.stats{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:.8rem}.grid .card,.stats .card{margin:.2rem 0}.stats b{font-size:1.4rem}.pills,.row{display:flex;flex-wrap:wrap;gap:.55rem 1rem;align-items:center;margin:.7rem 0}.pills span,.pill{font-size:.8rem;border:1px solid var(--line);border-radius:999px;padding:.18rem .63rem;color:var(--mute)}.callout{border-left:3px solid var(--sand);padding:.55rem .85rem;background:#243228;border-radius:4px;margin:.7rem 0}.ok{color:var(--mint)}.error{color:var(--red)}.result{border-color:#6b8652}
@@ -142,6 +142,15 @@ select,input:not([type=radio]),textarea{background:#11191d}
 .lesson-steps b{font-size:.88rem}.lesson-steps small{font-size:.75rem}
 .lesson-steps [aria-current=step]{border-color:var(--mint);background:#243b34}
 .row.lesson-actions{align-items:stretch}
+
+.decision-explainer {margin:.75rem 0 1rem}
+.decision-picked{color:var(--mute);margin:.45rem 0}
+.decision-right,.decision-why{margin:.45rem 0;line-height:1.65}
+.decision-why {padding:.68rem .78rem;border-inline-start:3px solid var(--mint);background:#223630;border-radius:0 .5rem .5rem 0}
+.decision-why b{display:block;margin-bottom:.17rem}
+.ref-secondary {background:#172329;border-color:#40545a}
+.ref-secondary > summary {font-weight:650;color:#c5d7d9}
+.decision-correction{color:#f0d497;margin:.45rem 0}
 </style>
 </head>
 <body>
@@ -1892,10 +1901,680 @@ const bankSupplementIds=Object.freeze(Object.fromEntries(Object.entries(suppleme
 return {bankLessonIds,bankSupplementIds};
 })();
 
+const coaching_dataModule=(()=>{
+// Original per-question teaching notes, not a reproduction of the textbook.
+const coaching={
+  "c0-baseline-q1": {
+    "hint": "換咗一張牌，先搵邊啲假設仲成立，邊啲要重新核對。",
+    "explain": "Q 換成 9，雙方頂對、兩對同可反加嘅組合都可能改變。帶到新牌面嘅係比較兩邊範圍嘅方法，而唔係 AQ3 嘅下注答案。"
+  },
+  "c0-baseline-q2": {
+    "hint": "你睇到嘅兩手，係咪等於每次出現呢個情形都睇到？",
+    "explain": "你只知道兩手弱牌確實出現，唔知道對手有幾多次行到同一個節點而冇攤牌。可以記作兩個已知例子，但唔可以把未知牌當成同一類。"
+  },
+  "c0-baseline-q3": {
+    "hint": "對手面對你加注，除咗跟，仲可以點回應？",
+    "explain": "跟注多只交代咗一條分支。若對手亦更常 4-bet，你嘅邊緣 3-bet 便可能更常被迫棄；同一跟注率可以對應唔同風險。"
+  },
+  "c0-baseline-q4": {
+    "hint": "原本 200 次機會，同新問題有邊項設定唔一樣？",
+    "explain": "下注價錢變咗，願意跟或反加嘅牌可能唔同。舊 200 次可以保留作對照，但新尺寸要有自己嘅分母及比較基準，唔好當舊樣本已經回答新問題。"
+  },
+  "c0-variance-q1": {
+    "hint": "把「一批結果」同「重複好多次後嘅平均」分開。",
+    "explain": "正期望值係所有可能結果嘅加權平均，唔表示每批都係正。就算模型冇變，某一批都可以因發牌落喺較差一端。"
+  },
+  "c0-variance-q2": {
+    "hint": "睇清楚匯出欄用「毛」定「淨」，先決定要再扣乜。",
+    "explain": "18 已經由毛額扣出；由淨值再扣一次，只會把同一筆費用計兩次。確實未入帳嘅其他成本，先另列一欄。"
+  },
+  "c0-variance-q3": {
+    "hint": "如果下一次做同一個決定但結果輸咗，邊啲紀錄仍然一樣？",
+    "explain": "即使最後贏，門檻仍然計錯，而分心係當時狀態。把三樣分開，就可以針對可改善嘅事練習，唔會俾一手贏錢蓋過錯誤。"
+  },
+  "c0-variance-q4": {
+    "hint": "同樣 +3 背後，有哪兩項資料未對齊？",
+    "explain": "50 手同 5,000 手嘅估計穩定程度唔同；抽水口徑唔同，連所量度嘅收益都唔一定相同。先對齊定義同場景，再用原始手數解讀結果。"
+  },
+  "c1-first-open-q1": {
+    "hint": "唔追溯邊個翻前加注；由按鈕位向左，跳過已棄牌嘅人。",
+    "explain": "翻牌後由按鈕位左側第一個仍在牌局嘅人先動。小盲已唔在，順序就係 BB、CO、BTN；翻前由誰進攻並不改變呢個順序。"
+  },
+  "c1-first-open-q2": {
+    "hint": "把你自己暫時放上枱嘅籌碼，同其他玩家留低嘅籌碼分開。",
+    "explain": "冇人跟，未被配對嘅 2.3 BB 只係退返俾你。真正新增所得係小盲 0.5 加大盲 1，共 1.5 BB。"
+  },
+  "c1-first-open-q3": {
+    "hint": "輪到大盲時，先比對佢已放嘅錢同本輪最高投入。",
+    "explain": "Hero 只跟到一個大盲，BB 先前已放足，過牌就落翻牌；若 Hero 加到更高，BB 想繼續就要按新價錢回應。"
+  },
+  "c1-first-open-q4": {
+    "hint": "牌依然係 66，但換位後，有邊啲人未動？翻牌後邊個先？",
+    "explain": "SB 已放半個大盲，身後只得 BB；被 BB 跟之後反而由 SB 先行。UTG 同一手牌背後有五位，唔可以當成同一個首入池問題。"
+  },
+  "c1-range-q1": {
+    "hint": "把「我中到牌」同「對方願意再付」當成兩件事。",
+    "explain": "中三條只改善自己；如果牌面出現可成順或同花嘅組合，對手嘅大對子未必肯再打大池。隱含收益只可以計實際有機會收取嘅額外支付。"
+  },
+  "c1-range-q2": {
+    "hint": "呢個係明示鎖定嘅模型。問邊啲牌被准許走入「首次加注」呢條路。",
+    "explain": "首次加注已透露範圍被鎖定為 AA；即使其他牌物理上可以被派到對手，喺呢條行動線都冇權重。AA 亦只保留未被已見牌佔用嘅組合。"
+  },
+  "c1-range-q3": {
+    "hint": "問嘅係翻前被反擊嘅機會；先數未行動嘅座位。",
+    "explain": "位置越後、前面全棄時，要越過嘅未行動玩家越少。呢個係較闊開池嘅其中一個理由；翻牌後位置則係另一個理由，唔係同一件事。"
+  },
+  "c1-range-q4": {
+    "hint": "由對手角度睇：你加注呢個動作，額外話咗啲乜俾佢聽？",
+    "explain": "對手知道你只有贏家先加，便可以放棄本來可能想付款嘅較差牌。問題唔係強牌變弱，而係行動洩露得太多。"
+  },
+  "c1-realization-q1": {
+    "hint": "把手牌同翻牌點數攤開：你已經有連住嘅四個點數，睇相鄰兩端。",
+    "explain": "9、T、J、Q 已經連住：來 8 可以用 8–Q，來 K 可以用 9–K。唔需要兩張都出，亦唔需要兩手底牌同花先可以成順。"
+  },
+  "c1-realization-q2": {
+    "hint": "問清楚比較係「免費睇晒五張牌」，定係「中途可能有人加注」。",
+    "explain": "原始權益假設會睇晒公牌，再計你平均分到幾多最終底池。開池 EV 仲要計被加、被迫棄及改善後可贏幾多。即使免費攤牌 A9o 較高，兩者實際開池排序仍可不同。"
+  },
+  "c1-realization-q3": {
+    "hint": "先數枱面同手牌合共有幾多梅花，再數仲會發幾多張公牌。",
+    "explain": "兩張底牌都係梅花，但翻牌一張都冇。剩低只有轉牌同河牌兩張，即使兩張都係梅花亦只得四張，成花需要五張。"
+  },
+  "c1-realization-q4": {
+    "hint": "各自用「原始權益 × 題目指定實現比例」；唔好只比第一個百分比。",
+    "explain": "甲雖然原始權益較高，照模型只取得 49% 嘅 55%，即 26.95%；乙取得 41% 嘅 80%，即 32.8%。兩個值只係簡化比較，唔包括完整下注收入同成本。"
+  },
+  "c1-depth-q1": {
+    "hint": "兩個情形唔變牌型或盲注規則，只改之後仲有幾多籌碼。",
+    "explain": "20 BB 比 100 BB 更易用盡可以互相配對嘅籌碼，後續能下注、能付錢嘅空間較少。改深度唔會改派牌，但會改多街計劃。"
+  },
+  "c1-depth-q2": {
+    "hint": "格仔顏色係呢個設定嘅解，定係同一張牌喺所有設定嘅承諾？",
+    "explain": "混色交代咗模型喺指定位置、深度和可用尺寸之下有幾種動作。改對手行為、碼深甚至容許尺寸，唔可以再假定原本兩個動作等值。"
+  },
+  "c1-depth-q3": {
+    "hint": "先搵呢個低牌面可以點連成順，再問嗰兩張有冇 A。",
+    "explain": "87 補齊 5、6、7、8、9，但呢兩張唔含 A，所以被題設完全排除。牌面覆蓋問嘅係範圍能唔能夠出現呢類牌，而非只比較翻前高張。"
+  },
+  "c1-depth-q4": {
+    "hint": "按下一口跟注之後，仲有冇人可以落新一口注？",
+    "explain": "對手已全下，你跟足後冇第三個玩家，牌局就唔會再有新下注逼你棄。你未必用盡自己籌碼，但可以睇到完整公牌；值唔值得跟仍要比權益同價錢。"
+  },
+  "c2-price-q1": {
+    "hint": "寫落兩件事：跟完枱面有幾多；詐唬成功真正贏到幾多。",
+    "explain": "跟注要先有對手下嘅 5，再加自己嘅 5，所以 5/25＝20%。純詐唬當自己下注嗰邊，係冒 5 贏原池 15；對手棄 5/20＝25% 先打和。"
+  },
+  "c2-price-q2": {
+    "hint": "睇到轉牌同睇晒河牌，係咪只需要付而家呢一口？",
+    "explain": "32% 係四二法對兩張牌命中嘅近似。如果轉牌未中而對手再下，你可能要再付先睇到河牌，或者要先放手；而家跟注並唔包兩張。"
+  },
+  "c2-price-q3": {
+    "hint": "想像嗰張方塊同一時間幫到你同對手：邊個改善得更多？",
+    "explain": "一張方塊可成就兩邊嘅花；如果對手嗰副大，你雖然命中卻仍輸，仲可能多付一注。因此嗰啲方塊唔可以全部當乾淨 outs。"
+  },
+  "c2-price-q4": {
+    "hint": "題目話 32 已包括邊筆錢？最終池只仲欠邊一口？",
+    "explain": "32 已經有對方下注，唔可以將佢再加一次。你付 8 後總池 40；21% × 40 − 8＝+0.4，所以只喺題設下跟注有少少優勢。"
+  },
+  "c2-build-q1": {
+    "hint": "順子睇相連點數；同花另數，而家枱面有幾多張黑桃？",
+    "explain": "2 或 7 都可以補成五張順。黑桃卻只得公牌一張加手上兩張，必須轉牌河牌都出黑桃，先有五張。"
+  },
+  "c2-build-q2": {
+    "hint": "將對手「棄」同「跟」拆開；被跟時先算最後池，再扣返你嗰口。",
+    "explain": "棄牌一半時你即收 24；被跟時可分 48 嘅四分一，正好抵消下注 12。故總值 +12，但過牌可能有自己嘅回報，呢題冇同過牌比較。"
+  },
+  "c2-build-q3": {
+    "hint": "舊池本身已經屬於你。新下注之後，幾常有人額外畀錢？",
+    "explain": "對手只跟或棄，而且被跟時你都獨贏，下注額乘跟注機會就係額外收入。5×80%＝4；10×45%＝4.5。較少人跟都可以收多啲。"
+  },
+  "c2-build-q4": {
+    "hint": "分別計一百次裡成功收池同被跟時嘅淨回報，唔好只計成功次數。",
+    "explain": "棄牌分支加 0.4×30＝12；被跟時平均取得最後池 70 嘅一成，再扣 20，係 −13。後者佔六成、扣 7.8，總 EV 先係 +4.2。"
+  },
+  "c2-pool-q1": {
+    "hint": "你要嘅係邊一條兩街行動？前一街有冇落嗰口注，會令入場牌變唔變？",
+    "explain": "雙過嘅牌唔需要通過翻牌小注嘅篩選，帶到轉牌嘅範圍同兩街都下注唔同。即使最後同樣遇反加，都唔屬於指定分母。"
+  },
+  "c2-pool-q2": {
+    "hint": "縮窄條件可能更近你想問嘅場景，但仲有幾多資料支撐？",
+    "explain": "180 次回答較寬嘅節點；4 次只係更細花色子組，波動會好大。兩個分母都保留，唔好將後者嘅比例直接當固定規律。"
+  },
+  "c2-pool-q3": {
+    "hint": "對唔同價錢，合理選擇本身係咪應該有相同棄牌率？",
+    "explain": "面對大注本身就可能應該多棄。59% 高過 44% 只係描述差異；要講「棄過多」，需要將每個尺寸同各自嘅基準比較。"
+  },
+  "c2-pool-q4": {
+    "hint": "未記到行動有冇可能係跟、棄或加？唔好幫佢代填。",
+    "explain": "62 次棄牌只喺 105 次有記錄機會中可驗證，所以記 62/105；另列 14 次未知。直接除 119 會悄悄當未知全唔棄。"
+  },
+  "c2-showdown-q1": {
+    "hint": "對手想放棄嘅牌而家落後，但如果翻多張牌會點？",
+    "explain": "兩張高牌而家唔贏口袋對，仲可以靠後續公牌追過。迫呢類有改善能力嘅牌棄，先叫保護；迫一手根本冇機會贏嘅牌棄，唔係同一個好處。"
+  },
+  "c2-showdown-q2": {
+    "hint": "河牌已冇新牌。問弱牌會唔會付錢，強牌會唔會放棄。",
+    "explain": "較差牌棄唔會畀你多一注；較好牌跟就會令你多輸一注。冇未來的牌要防，題設兩邊都冇支持呢次大注。"
+  },
+  "c2-showdown-q3": {
+    "hint": "落第一口唔等於成本已定。先想對手加注之後，你邊啲牌仲可以繼續。",
+    "explain": "小注只係初始價錢，對方反加後你會面對新價錢。應事前分清可以按價格繼續嘅手、要棄嘅手，以及邊啲適合先過牌。"
+  },
+  "c2-showdown-q4": {
+    "hint": "比較不下注時本來贏到嘅牌，同下注被跟時剩低嘅牌。",
+    "explain": "過回可保留同未中牌攤牌嘅好處；一下注，呢啲本來贏到嘅牌就棄，所有跟嘅成對你又打唔贏。河牌冇下一張，唔存在保護理由。"
+  },
+  "c3-threebet-q1": {
+    "hint": "由大盲起，數前面已經有幾次主動提高價錢。",
+    "explain": "按翻前叫法，大盲係第一注，UTG 開池係第二注，HJ 首次再提高就係 3-bet，唔需要等到第三條街。"
+  },
+  "c3-threebet-q2": {
+    "hint": "只數「見到翻牌」先會出現嘅扣費，然後逐條分支睇。",
+    "explain": "翻前全棄就冇發翻牌，題設呢條路唔扣翻後抽水；若有人跟到翻牌，可能扣。免咗一筆費用唔等於所有翻前加注都正 EV。"
+  },
+  "c3-threebet-q3": {
+    "hint": "同一個 UTG 開池，但兩位要留意嘅後方玩家數量一樣嗎？",
+    "explain": "HJ 平跟後仍有較多玩家可再加；BTN 後面通常只剩兩盲，對盲注翻後有位置。跟注價錢可能相同，後續能唔能夠保住呢口價錢唔同。"
+  },
+  "c3-threebet-q4": {
+    "hint": "望下你已貼嘅大盲：而家有冇一個未被配對嘅更高金額？",
+    "explain": "SB 只補到你已放嘅金額，你可過牌而唔另付，照樣睇翻牌。預先棄牌連呢個免費選項都放棄，舊盲注唔會退返。"
+  },
+  "c3-squeeze-q1": {
+    "hint": "在 SB 出手前，桌上有冇一個先開嘅人，同一個已付錢跟住嘅人？",
+    "explain": "UTG 先開、BTN 先跟，SB 用再加注同時向兩位施壓，呢個先係擠壓。冇 BTN 嗰口跟注就只係一般 3-bet。"
+  },
+  "c3-squeeze-q2": {
+    "hint": "睇清題設將 AA／KK 分去邊個動作，就知道佢哋有冇入呢條路。",
+    "explain": "模型一律用兩手做 3-bet，所以 BTN 行平跟線時已排除 AA／KK。但範圍上限受限唔等於冇高對或其他強牌。"
+  },
+  "c3-squeeze-q3": {
+    "hint": "用目標總額減已貼盲注，唔好由零再計一次。",
+    "explain": "BB 已經放 1，追到 3 只補 2。標準桌若其他人已棄、冇額外盲注尚待行動，BB 跟完就會結束呢輪。"
+  },
+  "c3-squeeze-q4": {
+    "hint": "同一個再加注總額背後，有幾多人可能繼續？你翻後先定後行？",
+    "explain": "多一位已付錢，改咗底池和可能回應嘅組合；Hero 先行亦影響後續實現。注碼一樣唔會令呢啲分支或 EV 自動相同。"
+  },
+  "c3-board-q1": {
+    "hint": "數翻前加注有幾級；最後一口係平跟定再加？",
+    "explain": "CO 初次開池，BTN 再加，CO 只跟，所以最後一層仍然係 3-bet。剩兩人只改「單挑」，唔改池型。"
+  },
+  "c3-board-q2": {
+    "hint": "一邊可以出現多一種順，係咪已等同其餘所有牌打起來都領先？",
+    "explain": "JTo 令 BB 有額外順子候選，但 UTG 仍可有一批 set。要判邊邊整體權益較高，仲要計每類組合實際比重同對打結果。"
+  },
+  "c3-board-q3": {
+    "hint": "呢一街有人下注之前，BB 已經主動落第一口，定係先過再加？",
+    "explain": "BB 係翻前跟注方，翻牌先下注，而且冇在回應翻牌下注。呢個叫領打；label 只描述動作，唔代表一定打得好或差。"
+  },
+  "c3-board-q4": {
+    "hint": "如果同一尺寸令你喺乙模型更常面對反加，你原本以為可以繼續嘅牌仲站唔站得住？",
+    "explain": "頻繁反加會令弱牌更難便宜地睇到下一張，亦改變邊啲牌可以收價值。之前全範圍小注嘅假設要重算，唔係只搬原本尺寸。"
+  },
+  "c4-mdf-q1": {
+    "hint": "做兩次計數：詐唬者「冒幾多贏幾多」，防守者「冇棄嗰部分有幾多」。",
+    "explain": "零權益下注冒 3 去贏 9，棄牌達 3/12＝25% 就打和。其餘 75% 由跟同加組成；唔係要求每手牌有 75% 攤牌權益。"
+  },
+  "c4-mdf-q2": {
+    "hint": "題目嘅防守總額已包含加注。仲有邊部分要用跟注填返？",
+    "explain": "75 個百分點嘅繼續裡，17 個已分畀加注，因此跟注補 58。把加注另外再加到目標外，會錯計總防守。"
+  },
+  "c4-mdf-q3": {
+    "hint": "成功次數一樣，先只睇贏到嘅池；然後問唔成功時各蝕幾多。",
+    "explain": "兩種尺寸成功都收同一個舊池。失敗時大注要蝕更多，所以指定同棄率、冇被跟權益時，小注較省；價值下注可能有額外收入，不能照搬。"
+  },
+  "c4-mdf-q4": {
+    "hint": "先加跟注同加注，再單獨比較構成。唔好只睇跟注欄。",
+    "explain": "甲 59+8＝67%，基準 49+18 都係 67%。總防守相同，甲將 10 個百分點由加注轉去跟注；原來下注面對兩個模型會走入不同分支。"
+  },
+  "c4-sizing-q1": {
+    "hint": "先分別扣返已貼嘅 1 BB，再寫 BB 補齊後雙方加死錢嘅總池。",
+    "explain": "開到 2 時補 1，跟後池 2+2+0.5＝4.5；開到 3 時補 2，跟後 6.5。兩條門檻約 22.2% 同 30.8%，未計抽水或翻後。"
+  },
+  "c4-sizing-q2": {
+    "hint": "一個百分比話你知「幾多」，有冇話你知「哪副牌、用邊個動作」？",
+    "explain": "整體百分比唔會分配跟、棄、3-bet 到每一副牌。精確問某手要唔要反加，必須搵到對得上位置、尺寸及條件嘅動作格。"
+  },
+  "c4-sizing-q3": {
+    "hint": "比較防守範圍係提出問題嘅線索，定已經量度出開池方案？",
+    "explain": "開小一口令 BB 平跟價錢改變，但 BTN 邊緣開池嘅回報仍要計兩盲反擊同被跟後情況。兩個範圍嘅差額唔等於一條必做策略。"
+  },
+  "c4-sizing-q4": {
+    "hint": "總繼續率保留不變，問係邊一種回應取代咗另一種。",
+    "explain": "兩組都棄 42%，所以立即偷盲比例同一；遇到加注卻由 5% 去到 21%。小開池被平跟同被再加嘅後續成本唔同，要分開計。"
+  },
+  "c5-tree-q1": {
+    "hint": "找出誰正要做決定，再看桌上是否已有一口注。",
+    "explain": "第一手輪到 BB 回應 BTN 的下注；另一手輪到 BTN 回應 BB。牌面沒有變，但角色、先前資訊和可採取的行動都變了，不能共用同一套防守。"
+  },
+  "c5-tree-q2": {
+    "hint": "由 BB 過牌後再讀一格：誰還未行動，他能把翻牌帶到哪裏？",
+    "explain": "BB 先過不會結束翻牌。BTN 也過，牌才會在沒有翻牌下注下進轉牌；若 BTN 下而 BB 跟，兩人的範圍已經過了不同分支。"
+  },
+  "c5-tree-q3": {
+    "hint": "先別定要下幾多，試列出願意一路付錢的較弱牌。",
+    "explain": "弱對子願意在安全轉牌付第二口，不代表河牌也會付第三口。若過轉牌可保留這些較弱牌，也可比較翻牌、河牌取值；新牌會否改變價值目標才是關鍵。"
+  },
+  "c5-tree-q4": {
+    "hint": "一口大注被跟後，重看兩邊手牌分別經過了甚麼篩選。",
+    "explain": "下注方帶進來的是選擇下大注的牌，跟注方則只保留願意以此價格繼續的部分。原計劃對付的是過牌回到的範圍；有沒有足夠理由改為領打，現在要重新算。"
+  },
+  "c5-position-q1": {
+    "hint": "追蹤一次過牌後，是否仍有人有權下注。",
+    "explain": "單挑最後一位過牌時，這一街就結束，所以後位可以選擇不再付錢。先位過牌卻把決定交給後位；若還有人在你之後，自己的過牌也不能保證免費看牌。"
+  },
+  "c5-position-q2": {
+    "hint": "將「對方跟注要付幾多」和「他跟後有甚麼位置」一起看。",
+    "explain": "3-bet 尺寸較大會抬高對手平跟成本，可能少一些被跟後無位置的局面。你同時投入更多，遇跟注或 4-bet 的損益也要重算；位置本身不決定一個固定倍數。"
+  },
+  "c5-position-q3": {
+    "hint": "同一筆跟注成本，看看結算時你能分到的淨池有沒有變。",
+    "explain": "原始權益一樣，抽水提高後，即使贏池也取回較少，本來勉強賺錢的平跟可能不再合算。3-bet 也有被跟或再加的成本，要用同一抽水制度比較，不宜直接改成再加。"
+  },
+  "c5-position-q4": {
+    "hint": "把手上的 A 拿出牌堆，再數對手仍可有的跟注組合。",
+    "explain": "含你那張 A 的所有組合都要剔除；其他三張 A 仍可組成 Ax，對手也還有不含 A 的繼續牌。這只改變對手可能持有的組合數，未證明你的下注會多常成功。"
+  },
+  "c5-defend-q1": {
+    "hint": "每個候選把手牌和翻牌同花色的張數加起來，數還差幾張。",
+    "explain": "這手已有兩張紅心，桌上只有一張紅心，必須轉牌、河牌都見紅心才成五張；四張方塊則只差一張。這是成花條件，不保證成了就領先。"
+  },
+  "c5-defend-q2": {
+    "hint": "分開計兩批對手：一批願意多付，另一批仍有機會追過你。",
+    "explain": "弱 Jx 若繼續，你靠領先的牌收多一口；有活補牌的高牌若棄掉，你則免去之後被反超的部分風險。弱牌棄不會替你支付那口加注。"
+  },
+  "c5-defend-q3": {
+    "hint": "先辨認甲、乙各用甚麼牌放進同一個注碼。",
+    "explain": "甲用強牌和少數詐唬下注，繼續面對加注時可能較紮實；乙連大量弱牌也下注，更可能有東西可被趕走。同一價格只給相同的立即賠率，不給相同的對手範圍。"
+  },
+  "c5-defend-q4": {
+    "hint": "問被你趕走的是不是那些本來有機會反超的牌。",
+    "explain": "若弱牌本來極少、價值牌才是主要繼續者，加注不太能阻止弱牌改善，還會令你的第二對立即投入更多。仍須分開查較弱牌會否跟注，不能把保護失效當成自動跟或棄。"
+  },
+  "c5-high-low-q1": {
+    "hint": "用假設保留的兩組牌，先在 6-5-3 上拼出實際牌型。",
+    "explain": "74 組成 3–7 順子，63 以 6 和 3 成兩對，兩組按題設都留在 BB 而不在 BTN。這是頂端組合的差異，不能由這兩組直接推斷整批牌的平均權益。"
+  },
+  "c5-high-low-q2": {
+    "hint": "對每個尺寸，各自比較跟注者中你贏和輸的組合。",
+    "explain": "小注有 40 組弱牌對 12 組強牌繼續，較多弱牌願意付錢；大注只剩 7 組弱牌，還是有那 12 組強牌。題目只問取值方向，不能延伸為已算完所有分支的 EV。"
+  },
+  "c5-high-low-q3": {
+    "hint": "把原有領打分支刪除後，想想它的牌轉到哪個分支。",
+    "explain": "如果保留相同翻前範圍，再把翻牌領打頻率鎖成零，原本會帶頭下的強牌亦會過牌。BTN 遇到的過牌可能更強；BB 是否少過牌加注須另有設定，不能由全過牌推出。"
+  },
+  "c5-high-low-q4": {
+    "hint": "先剔除不可能出現的牌，再分開兩個尺寸的反應。",
+    "explain": "你的一張 A 可能同時擋掉較弱跟注者和較強跟注者；影響哪邊較大，才決定對價值尺寸有何作用。比較小注與大注時，把同一組牌會否棄、跟或加注都列清楚。"
+  },
+  "c6-polar-q1": {
+    "hint": "問被跟時誰想收一口，以及誰過牌時幾乎贏不到。",
+    "explain": "強牌被較弱牌跟可多收一口；攤牌幾乎不贏的牌，則要能令一批更好的牌棄才有理由大注。中等牌若大注趕走的全是本來已能贏的牌，過牌通常保留了它自己的用途。"
+  },
+  "c6-polar-q2": {
+    "hint": "對手下了一個原池，你要再付一個；先算跟完後的總池。",
+    "explain": "用 1 池去跟，跟完是 3 池；只贏詐唬的牌須在下注範圍贏 1/3。50% 是這尺寸下簡化模型的範圍防守量，不是下注方要放入的詐唬比例。"
+  },
+  "c6-polar-q3": {
+    "hint": "想像小注被跟和被加注，哪個分支令你比過牌多拿或多輸？",
+    "explain": "中對過牌仍可能贏整個現有池。小注只有真的獲弱牌付錢、而被反加的風險不致吞掉收益時，才有額外價值；「注碼很小」本身不能證明這筆收益存在。"
+  },
+  "c6-polar-q4": {
+    "hint": "分開寫跟注方的最後總池，和詐唬方成功時立即拿的池。",
+    "explain": "以 1 池為單位，跟半池後總池是 2，抓詐要贏 0.5÷2。純詐唬冒 0.5 拿 1，需棄牌 0.5÷1.5，因而防守總量約 2/3；前者數下注內的牌，後者數防守方動作。"
+  },
+  "c6-geometric-q1": {
+    "hint": "兩個人都付同一口，把兩筆新籌碼加回原池。",
+    "explain": "半池是 10，你下 10、對手也放 10，原有 20 變成 40；下一街的「半池」要按新池計。如果沒被跟，則根本沒有這條下一街路徑。"
+  },
+  "c6-geometric-q2": {
+    "hint": "算過轉牌兩邊一起放進多少後，再對比你的剩餘後手。",
+    "explain": "轉牌你付 10，剩 20。因對手跟了同樣的 10，河牌池變成 40，半池正好等於剩下的 20；若對手轉牌加注，這套兩街安排便不適用。"
+  },
+  "c6-geometric-q3": {
+    "hint": "先問每一街的分母是誰，再想「防守」有沒有其他動作。",
+    "explain": "真正能相乘的是條件機率，例如已跟翻牌、面對該轉牌下注時再平跟的比例。簡化 MDF 包括跟和加，後續樣本又只包含前街走到那一步的牌，所以各街 MDF 的乘積不是實際一路跟注率。"
+  },
+  "c6-geometric-q4": {
+    "hint": "每次落一個池及被跟，下一街的池會變原來幾倍？",
+    "explain": "每次原池加兩筆同額注，下一街池乘三：8、24、72。只加自己三筆就是 104，剛好等於題設後手；不能把原先已在池裏的 8 又算成自己的新投入。"
+  },
+  "c6-brick-q1": {
+    "hint": "比較誰帶了整批牌進去，誰只帶其中一個行動分支。",
+    "explain": "題目明說 UTG 所有牌都下小注，所以這次下注本身未刪走 UTG 的翻前手牌。BB 的棄牌與反加注牌不會跟到這個轉牌；即使新牌變化不大，原來的分支過濾仍發生了。"
+  },
+  "c6-brick-q2": {
+    "hint": "挑兩端和中段：哪些可拿值，哪些本來不容易贏池？",
+    "explain": "若對方中段結實，但你的頂端更強，大注可由真正拿值的牌帶入有合理棄牌目標的弱牌。中等牌若只能被較強牌跟，留待過牌容易保住已有攤牌權益；頂端強不等於整批牌都較好。"
+  },
+  "c6-brick-q3": {
+    "hint": "翻出同一個點數時，原先持有該點數的牌會進步成甚麼？",
+    "explain": "原有頂對到這張河牌可變三條。若轉牌選擇過牌的組合沒有頂對，這條線便少了一批能這樣改善的牌。還可能有葫蘆等其他強牌，所以要說是減少、不是沒有頂端。"
+  },
+  "c6-brick-q4": {
+    "hint": "列出你希望跟注和棄牌的對象，再拿它同過牌回報比。",
+    "explain": "如果本來已贏的弱牌幾乎都棄，而本來輸的強牌一直跟，中對既難取值也難完成詐唬。它還有機會便宜到攤牌，把大注位置留給更能從棄牌或補牌得益的組合再比較。"
+  },
+  "c6-overcard-q1": {
+    "hint": "在轉牌出 A 之前，先把走了其他分支的 Ax 剔除。",
+    "explain": "BB 的強 Ax 有部分翻前已再加，空 Ax 又可能在翻牌棄；UTG 若全範圍下注便沒在翻牌用下注刪掉 Ax。要按實際留下的組合及其佔比比較，不能只見高牌就給前位優勢。"
+  },
+  "c6-overcard-q2": {
+    "hint": "想像對方由小注改面對大注時，哪批牌最先消失。",
+    "explain": "較弱 Qx 願意付小注、卻會避開大注，比較兩個尺寸能收的錢時要先把這批弱牌算入。仍要問多少更強牌會跟或反加，不能由一次成功被跟判斷尺寸。"
+  },
+  "c6-overcard-q3": {
+    "hint": "只比較較弱跟注的機會時，先查哪一手抽走了較多付款組合。",
+    "explain": "甲手的牌令一部分較弱跟注者不可能出現；乙不抽走這批組合，被弱牌跟大的機會因而更有支持。這只是一個比較理由，還未知道較強牌與加注如何分佈。"
+  },
+  "c6-overcard-q4": {
+    "hint": "把「誰整體較有利」和「每手牌可以向誰取值」分開。",
+    "explain": "高牌來到可能令進攻方更能主動下注，但超注只留下頂端作對手時，很多中間牌的弱牌客人已被趕走。大注可服務頂端及精選詐唬，小注可針對仍願付的中段，按題設分開評估。"
+  },
+  "c6-pair-q1": {
+    "hint": "先看 BB 翻牌跟注的 Tx，轉牌的新 T 對它們有甚麼作用。",
+    "explain": "這批翻牌第二對會升成三條，BB 的範圍頂端因而增加。只要 BB 比對家保留更多這類牌，份量就可能特別明顯；不代表它的每一組牌都改善了。"
+  },
+  "c6-pair-q2": {
+    "hint": "上一街由誰下注只是一項資訊，這張公共牌會否重排兩邊的強牌？",
+    "explain": "BB 當前多了能取價值的三條，也可能有適合向中等牌施壓的抽牌，因此可檢驗主動下注這個分支。是否採用仍要比較過牌和對方會怎樣跟或加注，並非「範圍轉移就一定領打」。"
+  },
+  "c6-pair-q3": {
+    "hint": "若某些手牌不能領打，它們在這個模型還能做甚麼？",
+    "explain": "在相同到達範圍下把領打拿走，原本會領打的強牌及詐唬都移回過牌。這會換掉進攻方眼前的組合分佈，所以不能當成平衡解中剔除了已領打手牌的過牌範圍。"
+  },
+  "c6-pair-q4": {
+    "hint": "這條線在上一街實際被跟的是哪些對子，不是哪些牌曾經在對方範圍。",
+    "explain": "常用來反加的對子較少會跟到此處，轉牌即使出現同一點數，也只會把留下的那些對子升成三條。配對牌面相同，不代表兩條行動線的三條同樣多。"
+  },
+  "c6-multistreet-q1": {
+    "hint": "把對手會跟的組合按你現在哪些贏、哪些輸分開。",
+    "explain": "潮濕牌面增加了新強牌，但題設仍有 27 組比你弱的牌願意支付，對比 16 組較強者，被跟分支有取值成分。未知道加注多少、河牌怎樣變，不能斷言下注已比過牌好。"
+  },
+  "c6-multistreet-q2": {
+    "hint": "兩條線到河牌之前，對手在哪一街曾經要為繼續付錢？",
+    "explain": "連下兩街之後的河牌只包含願意付第二口的人；中間過牌那條線不用付這一口，仍可保留更多原本會棄的牌。兩個河牌樣本即使牌面相同，也不能混用棄牌率。"
+  },
+  "c6-multistreet-q3": {
+    "hint": "把河牌詐唬的目標寫出來，再問它們是否真的願意離開。",
+    "explain": "轉牌跟注可把中對送到河牌，但它們若遇再打一口仍照跟，就不能當作棄牌收益。強牌大多在轉牌反加只會改變份量，也不保證河牌的繼續者足夠弱。"
+  },
+  "c6-multistreet-q4": {
+    "hint": "同一批轉牌跟注牌，到新河牌上重新分組。",
+    "explain": "未中聽牌主要是你原本的目標；一部分現已成強牌，倚靠「未中就棄」的收益會下降。自己的牌亦可能擋掉會棄或會跟的組合，所以要把實際移除效果代回去。"
+  },
+  "c7-nuts-q1": {
+    "hint": "同一個原池在兩個選擇都相同，只比較對手額外付幾多。",
+    "explain": "30 × 70%＝21；90 × 28%＝25.2。即使較少被跟，大注在這個不會輸、無平分且無加注的模型中每次被跟收得更多，平均才較高。"
+  },
+  "c7-nuts-q2": {
+    "hint": "這個小注的額外回報來自哪一種回應？",
+    "explain": "若對手只跟或棄，小注便沒有引到額外一口加注的收益。此時可直接比較各注碼被跟的比率和金額；有沒有誘導要查相似河牌線，不可只記一次少見的反加。"
+  },
+  "c7-nuts-q3": {
+    "hint": "被更強牌跟了之後，下注額是收入還是支出？",
+    "explain": "堅果牌被跟時額外注碼是收入；你若在被跟的分支落後，它反而是虧損。下注還可能藉強牌棄牌取到賺頭，所以要按棄、跟、加及各自結果重新算。"
+  },
+  "c7-nuts-q4": {
+    "hint": "用兩個可能的額外收款，各自乘以其被跟機會。",
+    "explain": "25 × 0.8＝20，而 100 × 0.19＝19，小注在題設平均多 1。這只比較本來能獨贏時加收的錢；它也示範大注的門檻是實際付款率，而非某條尺寸口號。"
+  },
+  "c7-river-call-q1": {
+    "hint": "把上一街付過的錢放回當前底池，不再當作現在要付的費用。",
+    "explain": "轉牌跟注時還有新牌會改變你的勝率；到河牌這部分已定。現在要算的是再付這一口能否由當前下注範圍取回足夠，之前跟了多少不是今天繼續的理由。"
+  },
+  "c7-river-call-q2": {
+    "hint": "問移除的究竟是你打得贏的牌，還是打不贏的牌。",
+    "explain": "只有詐唬是你可以打贏的部分。甲擋掉對手常下注的未中同花，等於從可贏的分支扣走組合；乙保留它們較有利。若阻擋的主要是對方價值，方向可以相反。"
+  },
+  "c7-river-call-q3": {
+    "hint": "記一個看見的實例之前，先問可比較的機會共有幾多。",
+    "explain": "一手只證明對方曾把這副未中花用作三街詐唬，沒告訴你其餘同類機會如何選。未攤牌的牌也沒看見，不能用一次可見的例子填滿整個範圍。"
+  },
+  "c7-river-call-q4": {
+    "hint": "一邊數你會贏的下注組合，一邊算現在付款佔跟完總池的比例。",
+    "explain": "你只贏 6／24＝25% 的下注；跟 60 遇到最後 180 的池，需贏 1/3。用相對棄牌的損益表示，是 0.25×180−60＝−15，所以在這個等權重模型棄牌較好。"
+  },
+  "c7-depth-q1": {
+    "hint": "先把同一手 QQ 分別放進兩組對方範圍，而非比較牌面上的 Q。",
+    "explain": "同一 QQ 遇較多邊緣或詐唬組合，可贏的比例可能上升；前位只用頂端全下時則更常落後。這裏只指出範圍會變，要有價格及各組權重才能定實際跟棄。"
+  },
+  "c7-depth-q2": {
+    "hint": "只有對方也能匹配的籌碼，才可和他互相放進同一池。",
+    "explain": "單挑只會互相匹配到 120 BB。即使先把 180 BB 推出去，沒有被跟的 60 BB 也不是這個底池的可贏款。多人、邊池有不同的配對方式。"
+  },
+  "c7-depth-q3": {
+    "hint": "把現在要補的銀碼，除以補完之後可以競逐的總池。",
+    "explain": "95÷230＝41.3%，說的是忽略抽水時長期要拿回的等效池份額。230 已是跟後總池，不能再加一次 95，也不應用起手籌碼做分母。"
+  },
+  "c7-depth-q4": {
+    "hint": "把 39% 固定不動，逐一看它落在兩個門檻的哪一邊。",
+    "explain": "同樣 39% 高於 36%、低於 42%，甲跟乙棄。在實戰，較深籌碼也可令對手改用不同的全下範圍；這題只固定它來隔離「跟注價格」的影響。"
+  },
+  "c7-population-q1": {
+    "hint": "先看哪個對手範圍少了那些邊緣牌可以打贏的組合。",
+    "explain": "價格相同而對方減少弱 3-bet，手中的邊緣牌通常更難以原先的權益防守。仍須給每類手牌適合的權重，不可由「較緊」跳到某手固定棄牌。"
+  },
+  "c7-population-q2": {
+    "hint": "「誰在甚麼情況下有機會 4-bet」要先於「看到幾多強牌」定義。",
+    "explain": "前位、盲位或不同注碼的分支原本就可有不同選擇。先按這些條件數機會和實際 4-bet，跟着說明有多少未見攤牌，再判斷牌力分佈是不是已知。"
+  },
+  "c7-population-q3": {
+    "hint": "你給求解器的是已知事實，還是想驗證的玩家反應假設？",
+    "explain": "鎖定後是「若對手如此行動，我們怎樣回應」的模型；它不會反過來證實對手真有這個頻率。換一個合理幅度跑敏感度，才能看結論會否因少數樣本而翻轉。"
+  },
+  "c7-population-q4": {
+    "hint": "把令你不想棄牌的感覺，和可算入權益的證據分兩邊。",
+    "explain": "牌少見只解釋點解這刻想跟，不能加到「可贏組合」上。一次攤牌適合標成待驗的範圍線索，跟注門檻再以當前代價計，不把這個人或級別描成確定模式。"
+  },
+  "c7-multiway-q1": {
+    "hint": "每個情境都把估計有效權益減去其自身的跟注門檻。",
+    "explain": "單挑有 30−25＝5 個百分點餘量；多人是 16−19＝−3。額外投入令底池變大、價格更好，同時可能令手牌贏整池機會跌更多，兩件事並不矛盾。"
+  },
+  "c7-multiway-q2": {
+    "hint": "想像你真的中了，但有另一人同時中了比你大的牌。",
+    "explain": "非堅果同花會在對手持更大同花時付錢，弱踢腳頂對也可能被同一對、較大踢腳壓住。多一個對手多一個潛在強範圍；「命中就能贏」會高估你的回報。"
+  },
+  "c7-multiway-q3": {
+    "hint": "把平跟者棄後留下的錢、以及開池者繼續的手牌分開看。",
+    "explain": "擠壓可以使一位對手棄並留下原來投入；你未必立即收整池，但可少面對一個範圍。若開池者繼續部分很強或會反加，這項好處須抵銷你多冒的注碼。"
+  },
+  "c7-multiway-q4": {
+    "hint": "較弱牌要願意向你付錢，還要面對場上別人的範圍。",
+    "explain": "多一位對手會改變每位較弱手牌敢跟的次數，也增加其中有人持更強牌的機會。先數哪些弱牌、較強牌和抽牌能走到下一街，再談下注街數。"
+  },
+  "c7-big-open-q1": {
+    "hint": "已放的 1 BB 只在原池記一次；另列現在還需補的部分。",
+    "explain": "原池已有 4＋1＋0.5＝5.5；大盲從 1 補至 4，即 3，跟後池成 8.5。小盲棄了仍留下 0.5，不會在跟注時計成新投入。"
+  },
+  "c7-big-open-q2": {
+    "hint": "保持對手範圍不變，重做 BB 跟注額那一欄。",
+    "explain": "開到 2，你再付 1；開 4，就再付 3。最後總池也會增，但新成本佔最後池的比例會變，所以不能以同一張牌表無視代價。"
+  },
+  "c7-big-open-q3": {
+    "hint": "若你最後贏池，抽水提高會不會改變實際拿回的金額？",
+    "explain": "見翻牌付更高抽水，令用相同銀碼跟注後能贏到的淨池縮小。原來跟、棄很接近的組合最受影響；是否改成 3-bet 還要查加注本身的被跟與反加風險。"
+  },
+  "c7-big-open-q4": {
+    "hint": "對兩種尺寸各畫一次最終池，留住 SB 的 0.5 BB。",
+    "explain": "開到 2.5，補 1.5，跟完池 5.5；開到 5，補 4，跟完池 10.5。1.5÷5.5 及 4÷10.5 就是兩個門檻。這裏沒計抽水及翻後再付錢。"
+  },
+  "c7-cold-q1": {
+    "hint": "由大盲、開池、第一次再加順序數注；再看 CO 之前有沒有自願入池。",
+    "explain": "UTG 開池是第二口，HJ 的首次再加是第三口。CO 首次自願入池就平跟第三口，這就是冷跟；若他自己先開池再跟，便不是同一種進場方式。"
+  },
+  "c7-cold-q2": {
+    "hint": "看看 CO 之後，前面有人仍未回應 HJ 的加注嗎？",
+    "explain": "UTG 只放過開池注，還未決定怎樣回應 HJ。CO 平跟增加了池，但不關閉那個決定；若 UTG 再加，CO 可能未見翻牌就要再付或退出。"
+  },
+  "c7-cold-q3": {
+    "hint": "把兩種深度跟完後剩餘的籌碼，除以跟完即時的底池。",
+    "explain": "付同一筆跟注，較短後手在翻牌的後手／底池比例更低，之後一兩口即可令你要作大比例投入。深籌碼可留給多街取價值的空間，不能直接推進短籌碼版本。"
+  },
+  "c7-cold-q4": {
+    "hint": "先數 BTN 下的是第幾口，再問 SB 是跟同一口還是把金額推高。",
+    "explain": "大盲算第一口，CO 開池是第二口，BTN 是第三口。SB 由未主動入池到把注碼推到 18，意思是以第三位玩家作第四口再加；18 本身不是固定的冷 4-bet 尺寸。"
+  },
+  "c8-probe-q1": {
+    "hint": "依序標記翻前誰是進攻方、翻牌誰下過注、誰先開轉牌。",
+    "explain": "翻前是 CO 主動，翻牌兩位都沒有接續下注。BB 因而能從跟注者身份開轉牌；只有這條前序才支持把其下注歸入這個試探樣本。"
+  },
+  "c8-probe-q2": {
+    "hint": "在兩種情形，CO 的轉牌範圍分別來自翻牌哪一個動作？",
+    "explain": "CO 在這個版本有翻牌下注，BB 又選了跟注，所以兩邊範圍都被行動篩過。BB 轉牌先下可稱領打，但不能搬用「CO 放棄翻牌下注」那一條線的數據。"
+  },
+  "c8-probe-q3": {
+    "hint": "如果他常把強牌留在翻牌過牌裏，想想轉牌試探可能被哪些牌繼續。",
+    "explain": "過牌分支可以包含慢打強牌，轉牌不一定一壓便走。先定義他留了多少強成牌及可反加聽牌，再估小注能取多少價值、能令哪些牌棄。"
+  },
+  "c8-probe-q4": {
+    "hint": "將轉牌下注者與翻前開池者的身份對一對。",
+    "explain": "這次是 BTN 在翻牌過牌，到了轉牌才以原進攻方的身份下注。BB 仍然是過牌者，對方是在做延遲持續下注，而非走 BB 試探那邊。"
+  },
+  "c8-utility-q1": {
+    "hint": "每個尺寸都分成「對方棄掉，你收原池」和「被跟而付出」。",
+    "explain": "甲：0.35×100−0.65×25＝18.75；乙：0.52×100−0.48×90＝8.8。乙多拿到一些棄牌，但被跟的每次成本高得多，足以反轉排序。"
+  },
+  "c8-utility-q2": {
+    "hint": "試讓棄牌時收回的平均收入，剛好補上其餘時候的平均成本。",
+    "explain": "用 75 去冒險贏原來的 100，打和要 75÷(100＋75)＝42.9%。這是對手棄牌所需頻率，不是對手跟注的權益門檻。"
+  },
+  "c8-utility-q3": {
+    "hint": "另一個人要重跑同一道題時，首先要知道用了哪一欄數字。",
+    "explain": "印刷頁 84 的正文寫 37%，表 9.1 寫 39%。用任一欄都需標清來源並重算，不可混合成一個沒出現過的樣本，亦不能從兩個數字推論對手真實棄牌率。"
+  },
+  "c8-utility-q4": {
+    "hint": "只變棄牌機率；原池及每次被跟所輸的注碼不變。",
+    "explain": "原本收池 20、平均成本 12，淨＋8。降至 25% 時收池 12.5、平均成本 15，淨 −2.5。相同下注尺寸不會鎖定收益，對手繼續多了就可使 EV 轉負。"
+  },
+  "c8-barrel-q1": {
+    "hint": "把河牌前畫成兩步：翻牌怎樣完結，轉牌的第一口走了哪個回應。",
+    "explain": "先有雙過，才到 BB 轉牌試探。對方若轉牌棄，手牌已完；若跟，河牌才是續打分支。轉牌被反加是另一條線，要用新的對手範圍。"
+  },
+  "c8-barrel-q2": {
+    "hint": "先用到河牌的範圍重數花，別照搬另一個人的翻牌習慣。",
+    "explain": "如果這位對手沒有用翻牌下注抽走聽花，又跟注進河牌，成花那張牌可令原本要棄的一批變成強牌。先重看還可趕走哪些中牌，不是見花面就假設大注有效。"
+  },
+  "c8-barrel-q3": {
+    "hint": "把兩種尺寸的例子放在同一個起點，並分別列各有幾多機會。",
+    "explain": "不同河牌紋理和對手會影響你選的尺寸，也影響他會不會棄。如果把不同分支混在一起，出來的棄牌率可能只是樣本組成不同，未證明尺寸本身較好。"
+  },
+  "c8-barrel-q4": {
+    "hint": "問現有資料描述的是跟注者，還是挑選反加注的那一批人。",
+    "explain": "反加是在原有範圍再分出的一部分，不能用跟注樣本填補。可寫下幾個「如果反加包含這些牌」的情境，先看不同假設怎樣改變難題，保留未知而非填固定解。"
+  }
+};
+
+return {coaching};
+})();
+
+const coaching_viewModule=(()=>{
+const {coaching}=coaching_dataModule;
+const {bankLessonIds}=bank_referencesModule;
+const esc=x=>String(x??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const checks={
+'c0-baseline':'先找出題目改了哪一個條件。原本支持做法的例子，跟新的情況是否仍可比較？',
+'c0-variance':'分開問：你是在看一手結果、長期表現，還是扣費後的數字？',
+'c1-first-open':'從前一個人開始數。看看有沒有人自願入池，及輪到你後還有誰可以行動。',
+'c1-range':'先分清「牌有機會改善」，和「改善後還有機會從對手收錢」。',
+'c1-realization':'除了攤牌，這手牌還可能在哪一街被迫棄牌，或有機會再取價值？',
+'c1-depth':'先找兩邊互相能付到的數額。不要用桌上籌碼最多的人做上限。',
+'c2-price':'先確認是你下注還是你跟注。把已在池中的錢和你現在要再付的錢分開。',
+'c2-build':'畫兩條路：對手棄牌，以及對手跟注。兩條路的收益要分開看。',
+'c2-pool':'先圈出真正有機會做這個決定的牌局，再數當中有幾多人這樣做。',
+'c2-showdown':'下注前各問一次：較弱的牌會不會跟？較強的牌會不會棄？',
+'c3-threebet':'先順着翻前的動作數，不要把第幾次下注和第幾條街混在一起。',
+'c3-squeeze':'把開池、平跟和再加注按先後排好，再看前面到底有沒有人平跟。',
+'c3-board':'把「整批牌平均多強」和「頂端有哪些牌」當兩個問題。',
+'c4-mdf':'先分清楚是算某一手的跟注門檻，還是算整個範圍的繼續比例。',
+'c4-sizing':'把開池總額、你已付的盲注和這次要補的金額分開，再對照圖表的注碼欄。',
+'c5-tree':'寫一句能辨認這個局面的行動順序。到輪到你才列分支。',
+'c5-position':'先問輪到你以前，看到了誰的動作；不要假設目前這張牌變強了。',
+'c5-defend':'先列要付的價格和下一街會遇到的風險，再想棄、跟、加各自達到甚麼。',
+'c5-high-low':'先只換牌面，看看哪些翻前組合會升級；不要連範圍也在心裏換掉。',
+'c6-polar':'把你可能下注的牌分成三組：取價值、逼對方棄牌、過牌仍有機會贏。',
+'c6-geometric':'每街先寫下下注前的底池、兩人的投入、以及跟完剩下多少。再算下一街。',
+'c6-brick':'從翻牌被跟後的範圍開始，別回到翻前。新牌有沒有改變關鍵組合？',
+'c6-overcard':'高牌出現後先重數兩邊仍留在線內的強牌，再看誰願意跟你。',
+'c6-pair':'先數前一街走這條線時，誰仍有和新公牌同點數的手牌。',
+'c6-multistreet':'將可能出現的河牌分組：哪些一出，就需要重算對手願跟或願棄的牌？',
+'c7-nuts':'把下注額和被跟注的機會分開，並檢查被跟時是否一定獨贏。',
+'c7-river-call':'先處理這口價錢。再劃掉對手不可能持有的牌，分清劃掉的是價值還是詐唬。',
+'c7-depth':'把牌名先放一旁。看對方位置、有效籌碼、跟注成本和他可能用甚麼再加。',
+'c7-population':'分清已觀察到的動作、攤牌看到的牌、和你在模型裏加進的假設。',
+'c7-multiway':'第三人進池會改底池，也會改你要擊敗的範圍。兩邊都要比較。',
+'c7-big-open':'先固定對手的開池範圍，只改尺寸，看看要補的價格和門檻怎樣變。',
+'c7-cold':'數清哪些人還沒有回答這次再加注。別把你自己的跟注當成這街已完。',
+'c8-probe':'依次看翻前誰帶頭、翻牌有沒有下注、下一街誰先下注，再為這條線命名。',
+'c8-utility':'兩個尺寸都寫下「對手棄時贏多少，對手不棄時輸多少」，不要只排棄牌率。',
+'c8-barrel':'只從真正跟過轉牌的人出發，再看河牌改了哪些價值和詐唬候選。'
+};
+const bespoke={
+ 'defend-k5o-2':{hint:'先找 BB 對 BTN 開到 2 BB 的圖；確認你讀的是 K5o，不是 K5s 或另一個尺寸。',explain:'這是查表題。2 BB 欄的 K5o 是紅格，圖例代表再加注。下一題若改成 2.5 BB，要換欄再讀，不能把紅格搬過去。'},
+ 'defend-k5o-25':{hint:'位置與上一類題相同，今次不同的是開池尺寸。先用 2.5 BB 那張圖再找 K5o。',explain:'同一手 K5o 在 2.5 BB 欄是藍格，這個模型選擇棄牌。價錢變了，不能沿用 2 BB 的答案；這也不是對所有對手的固定指令。'},
+ 'odds-half-call':{hint:'畫出對手下注後的底池；再問你一旦跟注，底池是不是還會多一筆。',explain:'原池 12，對手放 6，你再跟 6，最後共有 24。你用 6 換取能分到最後底池的機會，打和門檻就是 6 ÷ 24，也就是 25%。'},
+ 'odds-half-bluff':{hint:'從下注者角度想：對手棄牌時，你淨贏的是哪一筆錢？被跟必輸時又蝕哪一筆？',explain:'對手棄牌時，你拿走的是原來的 12；你自己放的 6 只是收回。被跟必輸時你蝕 6。要打和，對方棄牌率要達 6 ÷ (12＋6)，即三分一。'},
+ 'odds-half-mdf':{hint:'先看清楚問的是防守方整批牌的「繼續比例」，還是你手上這一手要不要跟。',explain:'半池純詐唬在對手棄三分一時打和，所以簡化模型下，防守方的跟注和再加注合共要佔約三分二。這不是規定每一手牌都要跟。'}
+};
+const mathHints={call:'跟完才知道池總共有多少。把你要補的一筆也列進去。',bluff:'先寫對手一棄你淨贏多少；你的下注收回不算贏多一筆。',mdf:'要回答的是防守方用整個範圍繼續多少，不是某手牌跟注的賠率。',equity:'想像每場平局的底池要分給兩人。勝局和和局計法一樣嗎？',ev:'分開寫成功的淨收益和失敗的損失，再按兩種情況的機會合併。'};
+function questionHint(q,lesson){
+ const note=coaching[q.id]??bespoke[q.id];
+ if(note)return note.hint;
+ return (q.k&&mathHints[q.k])||checks[lesson?.id??bankLessonIds[q.id]]||null;
+}
+function answerText(q){
+ return (coaching[q.id]??bespoke[q.id])?.explain??q.why??q.explanation??'';
+}
+const missed={
+ 'c0-baseline-q1':{
+  '原尺寸與頻率不變':'把上一手的注碼搬過來，等於假設兩邊範圍沒有受新牌面影響。',
+  '只要 A 高就固定下大注':'A 高只說明桌上有一張 A，未說明哪一邊有更多強牌，亦未說明對手怎樣應對。'
+ },
+ 'c2-price-q1':{
+  '25% 與 20%':'你把兩個分母調轉了：跟注要計自己的跟注；純詐唬只問新放的錢和原池。',
+  '33.3% 與 50%':'常見的滿池門檻不適用。這題下注是 5 對 15，不是下注 15。'
+ },
+ 'c2-price-q4':{
+  '跟注門檻 25%，應棄':'32 已經包含對手下注。你只需把自己的 8 加入分母。',
+  '再加一次對手下注才可算':'對手的錢已經在 32 裏，再加一次會把門檻算得太低。'
+ },
+ 'c2-build-q4':{
+  'EV 0，因 40% 正好是純詐唬門檻':'只計「被跟一定輸」才會打和。這題被跟還有 10% 權益。',
+  'EV −13，將被跟分支等於總結果':'−13 是被跟時的平均結果，未計對手直接棄牌時拿走原池的情況。'
+ },
+ 'c7-river-call-q4':{
+  '跟，因為轉牌已跟':'轉牌付出的籌碼已經在池裏。到河牌要比較的是現在再付這一口值不值。',
+  '跟，因為有六組詐唬':'六組要除以全部下注組合，不能只數詐唬而忽略價值牌。'
+ },
+ 'c8-utility-q1':{'乙，因為 52% 大於 35%':'大注的確令更多人棄牌，但每次被跟都蝕得更多。要同時計兩邊。'}
+};
+const changeOne={
+ 'c2-price-q1':'如果對手改下滿池，同樣從原池 15 出發，跟注要 15 ÷ 45，純詐唬就要 15 ÷ 30。數字變了，兩個分母的用法沒有變。',
+ 'c2-price-q4':'如果你的權益改成 19%，其他條件不變，平均取回 7.6，卻要付 8；這口便不值跟。',
+ 'c4-mdf-q2':'如果加注少了 5 個百分點，要維持同樣的總防守，跟注就要多 5 個百分點。這只比較總量，不表示兩種策略一樣好。',
+ 'c6-geometric-q2':'只把有效後手改成 35，兩次半池仍然只投入 30，河牌還剩 5。相同比例不等於一定打光。',
+ 'c7-river-call-q4':'若對手改下 30，而且題目強制維持原來那 24 組及權重，你付 30 追 120，剛好 25%，跟與棄打和。現實中換注碼時，對手下注組合也可能變。',
+ 'c8-utility-q1':'大注要令對方棄約 57.2%，才追得上小注的 EV +18.75，而不是只要比小注的 35% 高就夠。'
+};
+function decisionExplanation(q,a){
+ const label=i=>Array.isArray(q.choices)?(typeof i==='number'?q.choices[i]:q.choices.find(x=>x.id===i)?.text):'';
+ const chosen=label(a?.choice),right=label(q.answer),why=answerText(q);
+ const explain=why?.trim();
+ const correction=!a?.correct&&chosen?missed[q.id]?.[chosen]:null;
+ return '<div class="decision-explainer">'+(!a?.correct&&chosen?'<p class="decision-picked">你揀咗：'+esc(chosen)+'</p>':'')+
+ (right?'<p class="decision-right"><b>參考答案：</b>'+esc(right)+'</p>':'')+
+ (correction?'<p class="decision-correction">'+esc(correction)+'</p>':'')+
+ (explain&&explain!==right?'<p class="decision-why"><b>點解？</b>'+esc(explain)+'</p>':'')+(changeOne[q.id]?'<p class="decision-change"><b>只改一個條件：</b>'+esc(changeOne[q.id])+'</p>':'')+'</div>';
+}
+
+return {questionHint,answerText,decisionExplanation};
+})();
+
 const reference_viewModule=(()=>{
 const {privateCorePages}=private_textModule;
 const {courseLessons, courseExtras}=courseModule;
-const {courseGuides}=course_guideModule;
+const {questionHint}=coaching_viewModule;
 const {chartAssets}=chart_assetsModule;
 const {bankLessonIds, bankSupplementIds}=bank_referencesModule;
 
@@ -1989,26 +2668,23 @@ function primaryLesson(q,lesson){
  if(q.k)return core.get(extraForMath[q.k]);
  return core.get(bankLessonIds[q.id]);
 }
-function materialReference(q,{lesson=null,after=false,pdfs={},defaultOpen=false}={}){
+function materialReference(q,{lesson=null,after=false,pdfs={}}={}){
  const target=primaryLesson(q,lesson);
  const supplementary=lesson&&!core.has(lesson.id)?lesson:extras.get(bankSupplementIds[q.id]);
  const src=typeof q.source==='string'?q.source:'';
  const exact=exactCorePages(src);
  const keys=chartKeys(q,supplementary);
- const direct=q.topic&&lesson&&core.has(lesson.id);
- const focus=direct?'<p class="ref-source">這題先看：<b>'+esc(q.topic)+'</b>。</p>':'';
- let body=focus;
+ const hint=after?null:questionHint(q,lesson);
+ let body='';
  if(target){
-  const g=courseGuides[target.id];
   const [a,b]=target.pages;
   body+='<p class="ref-source"><b>核心課 · '+esc(target.title)+'</b><br>印刷第 '+span(a,b)+' 頁 · PDF 第 '+span(a+1,b+1)+' 頁</p>'+
-   (g?'<p>'+esc(g.plain)+'</p><details><summary>看一個對照例子</summary><p>'+esc(g.example)+'</p><p class="muted">'+esc(g.limit)+'</p></details>':'')+
    pdfBlock('core',a+1,b+1,pdfs);
  }else if(exact){
   const [a,b,f]=exact;
   body+='<p class="ref-source"><b>核心課 · 題目所列來源</b><br>印刷第 '+span(a,b)+' 頁'+(f?' · '+esc(f):'')+' · PDF 第 '+span(a+1,b+1)+' 頁</p>'+pdfBlock('core',a+1,b+1,pdfs);
  }else if(!keys.length&&!supplementary){
-  body+='<p>這是原創或補充概念題，未配對到確切的核心課段落。不會用相近章節冒充來源。</p>';
+  body+='<p>這題沒有直接對應的原書頁碼。</p>';
  }
  if(target&&exact&&exact[2])body+='<p class="ref-source">原題指定：印刷第 '+span(exact[0],exact[1])+' 頁 · '+esc(exact[2])+'。</p>';
  if(supplementary){
@@ -2017,13 +2693,16 @@ function materialReference(q,{lesson=null,after=false,pdfs={},defaultOpen=false}
   if(p){const a=typeof p[0]==='number'?p[0]:+p[1],b=typeof p[0]==='number'?p[1]:+(p[2]||p[1]);body+=pdfBlock('srp',a,b,pdfs);}
  }
  if(keys.length)body+='<div class="ref-figures">'+charts(keys)+'</div>';
- return '<details class="study-ref"'+(defaultOpen?' open':'')+'><summary>'+(after?'相關教材與頁碼':'答之前：看教材')+'</summary><div class="study-ref-body">'+body+'</div></details>';
+ const source='<details class="study-ref ref-secondary"><summary>'+ (after?'翻原書與圖表':'查看原書與圖表')+'</summary><div class="study-ref-body">'+body+'</div></details>';
+ if(after||!hint)return source;
+ return '<details class="study-ref pre-coach"><summary>未有頭緒？睇提示</summary><div class="study-ref-body"><p>'+esc(hint)+'</p>'+body+'</div></details>';
 }
 
 return {chartKeys,wirePdfBlocks,setLocalMaterials,hasCharts,materialsPicker,chartGallery,materialReference};
 })();
 
 const course_viewModule=(()=>{
+const {decisionExplanation}=coaching_viewModule;
 const {materialReference, hasCharts}=reference_viewModule;
 const {courseGuides}=course_guideModule;
 const {deeperGuides}=course_deepModule;
@@ -2051,7 +2730,7 @@ function question(r,lesson,pdfs){
  return '<section class="card"><div class="pills"><span>'+tag+'</span><span>第 '+(r.index+1)+'／'+r.items.length+' 題</span></div>'+
  '<progress aria-label="已完成的題數" value="'+r.answered.length+'" max="'+r.items.length+'"></progress>'+
  '<h2 tabindex="-1" id="course-focus">'+esc(q.prompt)+'</h2>'+(viewing&&!a?materialReference(q,{lesson,pdfs}):'')+
- (a&&viewing?'<p tabindex="-1" id="course-feedback" class="'+(a.correct?'ok':'error')+'">'+(a.correct?'答對了':'這題答錯了')+'</p><p><b>參考答案：</b>'+esc(q.choices[q.answer])+'</p><p>'+esc(q.why)+'</p><div class="row">'+nav('course-advance',r.index+1===r.items.length?'完成練習':'下一題',true)+'</div>'+materialReference(q,{lesson,pdfs,after:true,defaultOpen:true}):
+ (a&&viewing?'<p tabindex="-1" id="course-feedback" class="'+(a.correct?'ok':'error')+'">'+(a.correct?'答對了':'睇吓點解')+'</p>'+decisionExplanation(q,a)+'<div class="row">'+nav('course-advance',r.index+1===r.items.length?'完成練習':'下一題',true)+'</div>'+materialReference(q,{lesson,pdfs,after:true}):
  '<form data-form="course-answer"><fieldset><legend class="muted">選一個最符合條件的答案</legend>'+q.choices.map((_,i)=>choice(q,i)).join('')+'</fieldset><button class="primary">'+(viewing?'提交答案':'鎖定答案')+'</button></form>')+
  (!viewing?'<p class="muted">答完這一輪前，不會顯示正誤。</p>':'')+'</section>';
 }
@@ -2065,7 +2744,7 @@ function complete(r,lesson,record,pdfs){
  '<div class="row">'+(r.kind==='practice'?nav('course-start-check','第 3 步：做檢核',true):isCheck&&passing?nav('course-next','前往下一個建議課節',true):isCheck?nav('course-start-practice','回到練習再試',true):'')+
  nav('course-exit','返回本課',r.kind==='extra')+'</div>'+
  (r.kind==='check'&&total===1?'<p class="muted">這一題只核對本課的一個重點。若想確認自己能舉一反三，試做不同牌面或不同注碼的新題。</p>':'')+
- r.items.map((q,i)=>'<details><summary>'+(r.answered[i]?.correct?'答對 · ':'答錯 · ')+esc(q.topic||q.prompt)+'</summary><p>'+esc(q.prompt)+'</p><p><b>你的答案：</b>'+esc(q.choices[r.answered[i]?.choice])+'</p><p><b>參考答案：</b>'+esc(q.choices[q.answer])+'</p><p>'+esc(q.why)+'</p>'+materialReference(q,{lesson,pdfs,after:true})+'</details>').join('')+'</section>';
+ r.items.map((q,i)=>'<details><summary>'+(r.answered[i]?.correct?'答對 · ':'答錯 · ')+esc(q.topic||q.prompt)+'</summary><p>'+esc(q.prompt)+'</p>'+decisionExplanation(q,r.answered[i])+materialReference(q,{lesson,pdfs,after:true})+'</details>').join('')+'</section>';
 }
 function coursePage(c,hands,notice='',pdf={} ){
  const next=recommendedLesson(c.records), selection=find(courseLessons,c.lessonId)??courseLessons[0];
@@ -2357,6 +3036,7 @@ return {evaluateReviewDecision,rankReviewDecisions};
 })();
 
 function makeWorker(){const u=URL.createObjectURL(new Blob(["const parserModule=(()=>{\n// Browser-safe, local-only parser for English GGPoker Hold'em No Limit TXT.\nconst M = '\\\\$((?:[0-9]+|[0-9]{1,3}(?:,[0-9]{3})+)(?:\\\\.[0-9]{1,2})?)';\nconst header = new RegExp(`^Poker Hand #([A-Za-z0-9_-]+): Hold'em No Limit \\\\(${M}/${M}\\\\) - (\\\\d{4})/(\\\\d{2})/(\\\\d{2}) (\\\\d{2}:\\\\d{2}:\\\\d{2})$`);\nconst post = new RegExp(`^posts (small blind|big blind|ante|straddle) ${M}$`);\nconst direct = new RegExp(`^(calls|bets) ${M}( and is all-in)?$`);\nconst raise = new RegExp(`^raises ${M} to ${M}( and is all-in)?$`);\nconst refund = new RegExp(`^Uncalled bet \\\\(${M}\\\\) returned to (.+)$`);\nconst collect = new RegExp(`^(.+) collected ${M} from pot$`);\nconst cardList = s => (s.match(/\\[[^\\]]*\\]/g) || []).flatMap(g => g.slice(1,-1).trim().split(/\\s+/).filter(Boolean));\nconst validCards = (cards, n) => cards.length===n && cards.every(c=>/^[2-9TJQKA][cdhs]$/.test(c)) && new Set(cards).size===n;\nconst cents = s => {\n  if (!/^(?:\\d+|\\d{1,3}(?:,\\d{3})+)(?:\\.\\d{1,2})?$/.test(s)) throw new Error('invalid-money');\n  const [whole, frac=''] = s.replaceAll(',','').split('.');\n  const value = Number(whole) * 100 + Number(frac.padEnd(2, '0'));\n  if (!Number.isSafeInteger(value)) throw new Error('money-out-of-range');\n  return value;\n};\nconst format = s => s.replace(/^\\uFEFF/,'').replace(/\\r\\n?/g,'\\n').split('\\n').map(l=>l.trimEnd()).join('\\n').trim();\nconst positions = {2:['BTN','BB'],3:['BTN','SB','BB'],4:['BTN','SB','BB','CO'],5:['BTN','SB','BB','UTG','CO'],6:['BTN','SB','BB','UTG','HJ','CO']};\nconst sname = {FLOP:'flop',TURN:'turn',RIVER:'river'};\n\nfunction parseHand(raw) {\n  const lines=raw.split('\\n');\n  const h=lines[0].match(header);\n  if(!h) throw new Error(/^Poker Hand #\\S+: Omaha\\b/.test(lines[0])?'unsupported-omaha':'unsupported-header');\n  const [,id,sb0,bb0,y,mo,d,t]=h;\n  const stakes={sb:cents(sb0),bb:cents(bb0)};\n  if(stakes.sb<=0 || stakes.bb<stakes.sb) throw new Error('invalid-stakes');\n  const datetime=`${y}-${mo}-${d}T${t}`;\n  if(!Number.isFinite(Date.parse(datetime+'Z')) || new Date(datetime+'Z').toISOString().slice(0,19)!==datetime) throw new Error('invalid-date');\n  const m=lines[1]?.match(/^Table '(.*)' (\\d+)-max Seat #(\\d+) is the button$/);\n  if(!m) throw new Error('unsupported-table');\n  const [,table,max,button0]=m, button=Number(button0);\n  let seats=[],hero=null,cards=[],board=[],street='preflop',summary=false,flopCount=null,aggressiveActionsPreflop=0;\n  const flags=new Set(), shown=new Map(), actions=[],decisions=[], variants={}, state=new Map();\n  let pot=0,target=0,blinds={sb:0,bb:0},expectedPot=null,rake=null,jackpot=null,other=null,winnings=0;\n  for(const line of lines.slice(2)){\n    const seat=line.match(/^Seat (\\d+): (.*) \\(\\$((?:\\d+|\\d{1,3}(?:,\\d{3})+)(?:\\.\\d{1,2})?) in chips\\)$/);\n    if (!seat) break;\n    const n=Number(seat[1]), stack=cents(seat[3]),player=seat[2];\n    if (seats.some(s=>s.seat===n || s.player===player)) flags.add('duplicate-seat');\n    seats.push({seat:n,player,stack,position:null});\n  }\n  seats.sort((a,b)=>a.seat-b.seat);\n  const btnIdx=seats.findIndex(s=>s.seat===button), labels=positions[seats.length];\n  if(!labels || btnIdx<0 || Number(max)!==6) flags.add('positions-unverified');\n  for(let i=0;i<seats.length;i++){\n    const s=seats[i];\n    s.position=labels&&btnIdx>=0?labels[(i-btnIdx+seats.length)%seats.length]:`Seat ${s.seat}`;\n    state.set(s.player,{...s,remaining:s.stack,paid:0,folded:false,allIn:false});\n  }\n  const resetStreet=()=>{for(const s of state.values())s.paid=0;target=0};\n  const pfLive=()=>[...state.values()].filter(s=>!s.folded);\n  function transact(s,kind,amount,to,allIn=false) {\n    const before=pot;\n    if(kind==='return') {\n      if(amount>s.paid || amount>pot) flags.add('invalid-refund');\n      s.paid-=amount;s.remaining+=amount;pot-=amount;\n    } else if(kind==='fold') s.folded=true;\n    else if(amount) {\n      if(s.remaining<amount || s.allIn) flags.add('invalid-stack');\n      s.remaining-=amount;\n      if(kind!=='ante')s.paid+=amount;\n      pot+=amount;\n      target=Math.max(target,s.paid);\n      s.allIn ||= allIn || s.remaining===0;\n      if(allIn && s.remaining!==0) flags.add('all-in-stack-mismatch');\n    }\n    actions.push({street,position:s.position,kind,amount,to,allIn,potBefore:before,potAfter:pot});\n  }\n  for(const line of lines.slice(2+seats.length)) {\n    if(!line)continue;\n    if(line==='*** SUMMARY ***'){summary=true;continue}\n    if(summary) {\n      const amounts=line.startsWith('Total pot ') && [...line.matchAll(/(?:Total pot|Rake|Jackpot|Bingo|Fortune|Tax) \\$((?:\\d{1,3}(?:,\\d{3})+|\\d+)(?:\\.\\d{1,2})?)/g)].map(a=>cents(a[1]));\n      if(amounts && amounts.length>=3){[expectedPot,rake,jackpot]=amounts; other=amounts.slice(3).reduce((a,b)=>a+b,0)}\n      if(line.startsWith('Board ') && cardList(line).join(' ')!==board.join(' '))flags.add('board-summary-mismatch');\n      continue;\n    }\n    if(line==='*** HOLE CARDS ***') continue;\n    if(line.startsWith('Dealt to ')) {\n      const known=line.match(/^Dealt to (.+?) \\[([^\\]]+)\\]$/);\n      if(known){\n        if(hero)flags.add('multiple-visible-hole-hands');\n        hero=known[1];cards=known[2].split(/\\s+/);\n      }\n      continue;\n    }\n    const next=line.match(/^\\*\\*\\* (?:(FIRST|SECOND) )?(FLOP|TURN|RIVER) \\*\\*\\*/);\n    if(next) {\n      const cc=cardList(line), toStreet=sname[next[2]], n={flop:3,turn:4,river:5}[toStreet];\n      if(next[1]) {\n        flags.add('multiple-runs');\n        variants[next[1]]=cc;\n        if(next[1]==='FIRST') board=cc;\n        continue;\n      }\n      if(!validCards(cc,n) || board.some((c,i)=>c!==cc[i]) || {preflop:3,flop:4,turn:5,river:6}[street]!==n) flags.add('invalid-board-order');\n      if(toStreet==='flop') flopCount=pfLive().length;\n      street=toStreet;\n      board=cc;\n      resetStreet();\n      continue;\n    }\n    if(/^\\*\\*\\* (?:(?:FIRST|SECOND) )?SHOWDOWN \\*\\*\\*$/.test(line) || /^Hand was run /.test(line)) continue;\n    let q;\n    if((q=line.match(refund))) {\n      const s=state.get(q[2]);\n      if(!s){flags.add('unknown-refund-player');continue}\n      const returned=cents(q[1]);transact(s,'return',returned,s.paid-returned);\n      continue;\n    }\n    if((q=line.match(collect))) {\n      if(!state.has(q[1]))flags.add('unknown-winner');\n      winnings+=cents(q[2]);continue;\n    }\n    if(/: total \\$\\d/.test(line)){flags.add('unverified-pot-adjustment');continue}\n    const sep=line.indexOf(': ');\n    if(sep<0){flags.add('unsupported-line');continue}\n    const player=line.slice(0,sep), prose=line.slice(sep+2), s=state.get(player);\n    if(!s){flags.add('unknown-actor');continue}\n    if(/^shows \\[/.test(prose)){shown.set(player,cardList(prose));continue}\n    if(/^mucks\\b/.test(prose))continue;\n    if(/Cashout|Cash Out/i.test(prose)){flags.add('cashout');continue}\n    if((q=prose.match(post))){\n      const kind={'small blind':'sb','big blind':'bb',ante:'ante',straddle:'straddle'}[q[1]], amount=cents(q[2]);\n      if(kind==='ante'||kind==='straddle')flags.add('ante-or-straddle');\n      if(kind==='sb'||kind==='bb'){\n        blinds[kind]++;\n        if(amount!==stakes[kind] || s.position!==kind.toUpperCase() && !(seats.length===2&&kind==='sb'&&s.position==='BTN'))flags.add('blind-mismatch');\n      }\n      transact(s,kind,amount,kind==='ante'?0:s.paid+amount);continue;\n    }\n    let kind, amount=0, to=s.paid, allIn=false;\n    const due=Math.max(0,target-s.paid);\n    if(prose==='folds')kind='fold';\n    else if (prose==='checks'){\n      kind='check';\n      if(due)flags.add('check-facing-bet');\n    } else if((q=prose.match(direct))){\n      kind=q[1]==='calls'?'call':'bet';amount=cents(q[2]);to+=amount;allIn=!!q[3];\n      if(kind==='call' && (amount!==Math.min(due,s.remaining)||!due))flags.add('call-mismatch');\n      if(kind==='bet' && (target!==0||amount===0))flags.add('invalid-bet');\n    } else if((q=prose.match(raise))){\n      kind='raise';to=cents(q[2]);amount=to-s.paid;allIn=!!q[3];\n      if(amount<=0 || to<=target || (to-target!==cents(q[1])))flags.add('raise-mismatch');\n    } else {flags.add('unsupported-action');continue}\n    if(s.folded || s.allIn)flags.add('action-after-fold-or-all-in');\n    const actual={kind,amount,to};\n    if(player===hero) {\n      const live=pfLive(), opponents=live.filter(o=>o.player!==player);\n      // Facing an all-in, the already-invested amount is still available to match.\n      const effectiveStack=Math.max(0,Math.min(s.remaining,Math.max(0,...opponents.map(o=>o.remaining+Math.max(0,o.paid-s.paid)))));\n      decisions.push({index:actions.length,street,board:[...board],position:s.position,pot,toCall:Math.min(due,s.remaining),stack:s.remaining,effectiveStack,activeCount:live.length,flopCount,aggressiveActionsPreflop,actual,eligible:false});\n    }\n    if(street==='preflop'&&kind==='raise')aggressiveActionsPreflop++;\n    transact(s,kind,amount,to,allIn);\n  }\n  if(!hero || !state.has(hero) || !validCards(cards,2))flags.add('hero-unverified');\n  if(shown.has(hero) && shown.get(hero).slice().sort().join()!==cards.slice().sort().join())flags.add('hero-showdown-mismatch');\n  if(new Set([...cards,...board]).size!==cards.length+board.length)flags.add('duplicate-card');\n  const knownCards=new Set([...cards,...board]);\n  for(const [player,cc] of shown) if(player!==hero) {\n    if(!validCards(cc,2) || cc.some(c=>knownCards.has(c)))flags.add('duplicate-or-invalid-showdown-cards');\n    for(const c of cc)knownCards.add(c);\n  }\n  if(blinds.sb!==1 || blinds.bb!==1)flags.add('missing-or-extra-blind');\n  if(!summary || expectedPot===null || winnings===0)flags.add('incomplete');\n  if(expectedPot!==null && expectedPot!==pot)flags.add('pot-mismatch');\n  if(expectedPot!==null && winnings!==expectedPot-rake-jackpot-other)flags.add('settlement-mismatch');\n  if([...state.values()].some(s=>s.allIn) && (flopCount>2 || pfLive().length>2))flags.add('possible-side-pot');\n  const status=flags.size?'review':'verified';\n  for(const decision of decisions) {\n    decision.eligible=status==='verified'&&(decision.street==='preflop'||decision.flopCount===2)&&decision.activeCount>=2;\n  }\n  return {id,site:'GG',stakes,datetime,table,hero,cards,board,seats,actions,decisions,status,flags:[...flags],raw,flopCount,aggressiveActionsPreflop,summary:{pot:expectedPot,rake,jackpot,other,winnings},runouts:variants};\n}\nfunction parseHands(input) {\n  const normalized=format(String(input??''));\n  if(!normalized)return {hands:[],errors:[{index:0,reason:'empty-file'}]};\n  const blocks=normalized.split(/(?=^\\uFEFF?Poker Hand #)/m).map(format).filter(Boolean);\n  const hands=[],errors=[];\n  for(const [i,raw] of blocks.entries()){\n    try {hands.push(parseHand(raw))} catch(error){errors.push({index:i,reason:error.message})}\n  }\n  return {hands,errors};\n}\nfunction mergeHands(existing=[],incoming=[]) {\n  const keyed=new Map(existing.map(h=>[`${h.site}:${h.id}`,h]));\n  const conflicts=[];\n  let added=0,duplicates=0;\n  for(const h of incoming){\n    const key=`${h.site}:${h.id}`, old=keyed.get(key);\n    if(!old){keyed.set(key,h);added++}\n    else if(old.raw===h.raw)duplicates++;\n    else conflicts.push(h); // Keep current version stable. Caller can persist conflict candidates separately.\n  }\n  return {hands:[...keyed.values()],added,duplicates,conflicts};\n}\n\nreturn {cents,parseHands,mergeHands};\n})();\nconst {parseHands}=parserModule;\n\nself.onmessage=async({data:files})=>{\n  try{\n    const out=[];\n    for(let i=0;i<files.length;i++){\n      const file=files[i];\n      if(file.size>40*1024*1024)throw Error('單份檔案最多 40 MB，請分開匯入。');\n      const buffer=await file.arrayBuffer();\n      const hash=Array.from(new Uint8Array(await crypto.subtle.digest('SHA-256',buffer)),x=>x.toString(16).padStart(2,'0')).join('');\n      const result=parseHands(new TextDecoder().decode(buffer));\n      out.push({hash,hands:result.hands,errorCount:result.errors.length});\n      self.postMessage({type:'progress',done:i+1,total:files.length});\n    }\n    self.postMessage({type:'done',out});\n  }catch(e){self.postMessage({type:'error',error:e.message});}\n};\n"],{type:"text/javascript"})); try{return new Worker(u);}finally{URL.revokeObjectURL(u);}}
+const {decisionExplanation}=coaching_viewModule;
 const {validateMaterials, materialLimit}=materialsModule;
 const {materialReference, wirePdfBlocks, chartGallery, hasCharts, materialsPicker, setLocalMaterials}=reference_viewModule;
 const {questions: baseBank, skills, pendingQuestions}=questionsModule;
@@ -2426,8 +3106,7 @@ function question(q,type,i,total,why){
  '<div class="row"><button class="primary">'+(type==='exam'?'鎖定答案':'提交答案')+'</button></div></form></section>';
 }
 function answerCard(q,a){
- const choice=q.choices.find(x=>x.id===q.answer);
- return '<section class="card result"><h2 tabindex="-1" id="feedback" class="'+(a.correct?'ok':'error')+'">'+(a.correct?'答對':'再想一想')+'</h2><p>你的答案：'+esc(q.choices.find(c=>c.id===a.choice)?.text)+'</p><p><b>參考答案：</b>'+esc(choice?.text)+'</p><p>'+esc(q.explanation)+'</p>'+materialReference(q,{after:true,pdfs:coursePdfs,defaultOpen:q.mode==='practice'})+'<small>來源：'+esc(typeof q.source==='string'?q.source:JSON.stringify(q.source))+'</small></section>';
+ return '<section class="card result"><h2 tabindex="-1" id="feedback" class="'+(a.correct?'ok':'error')+'">'+(a.correct?'答對':'睇吓點解')+'</h2>'+decisionExplanation(q,a)+materialReference(q,{after:true,pdfs:coursePdfs})+'</section>';
 }
 function recommendedSkill(){
  for(const id of skillIDs){
@@ -2460,7 +3139,7 @@ function odds(){
  return headline('03 / 數學練習','賠率快測','不需牌譜。用常見注碼或實際銀碼練習；心算容許 ±1 個百分點。')+
  '<section class="card"><form data-form="math-settings"><div class="row"><label>題型 <select name="kind">'+Object.entries({mixed:'混合',call:'跟注',bluff:'純詐唬',mdf:'MDF',equity:'含平分權益',ev:'純詐唬 EV'}).map(([k,n])=>'<option value="'+k+'" '+(liveMath.kind===k?'selected':'')+'>'+n+'</option>').join('')+'</select></label><label>金額 <select name="difficulty"><option value="common">常見注碼</option><option value="cash" '+(liveMath.difficulty==='cash'?'selected':'')+'>實戰銀碼</option></select></label><button>換題</button></div></form></section>'+
  '<section class="card"><h2 tabindex="-1" id="question-title">'+esc(q.prompt)+'</h2>'+(!liveMath.result?materialReference(q,{pdfs:coursePdfs}):'')+
- (liveMath.result?'<div class="callout"><p tabindex="-1" id="feedback" class="'+(liveMath.result.correct?'ok':'error')+'">'+(liveMath.result.correct?'答對':'再想一想')+'。參考答案 <b>'+q.ans.toFixed(1)+'%</b></p><p>'+q.why+'</p></div>'+materialReference(q,{after:true,pdfs:coursePdfs,defaultOpen:true})+btn('next-math','下一題',true):'<form data-form="math"><div class="row"><label>答案（%） <input id="math-field" name="answer" inputmode="text" autocomplete="off" required></label><button class="primary">提交</button></div><p role="status" id="math-message"></p></form>')+'</section>';
+ (liveMath.result?'<div class="callout"><p tabindex="-1" id="feedback" class="'+(liveMath.result.correct?'ok':'error')+'">'+(liveMath.result.correct?'答對':'再想一想')+'。參考答案 <b>'+q.ans.toFixed(1)+'%</b></p><p>'+q.why+'</p></div>'+btn('next-math','下一題',true)+materialReference(q,{after:true,pdfs:coursePdfs}):'<form data-form="math"><div class="row"><label>答案（%） <input id="math-field" name="answer" inputmode="text" autocomplete="off" required></label><button class="primary">提交</button></div><p role="status" id="math-message"></p></form>')+'</section>';
 }
 function exam(){
  const intro=headline('04 / 留到最後才揭答案','盲測','題族與課程練習分開。每份只有完成後才會顯示答案。');
